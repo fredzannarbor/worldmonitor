@@ -706,6 +706,24 @@ export class NewsPanel extends Panel {
         ? `<ul class="digest-article-facts">${a.keyFacts.map(f => `<li>${escapeHtml(f)}</li>`).join('')}</ul>`
         : '';
 
+      // Shortened URI: domain + truncated path
+      let shortUri = '';
+      if (a.link) {
+        try {
+          const u = new URL(a.link);
+          const host = u.hostname.replace(/^www\./, '');
+          const path = u.pathname.length > 30
+            ? u.pathname.slice(0, 28) + '...'
+            : u.pathname;
+          shortUri = host + (path !== '/' ? path : '');
+        } catch { /* skip malformed */ }
+      }
+
+      const citationLine = [
+        a.citation ? escapeHtml(a.citation) : '',
+        shortUri ? `<span class="digest-article-uri">${escapeHtml(shortUri)}</span>` : '',
+      ].filter(Boolean).join(' · ');
+
       return `
         <div class="digest-article" data-digest-idx="${idx}">
           <div class="digest-article-header">
@@ -717,7 +735,7 @@ export class NewsPanel extends Panel {
           <div class="digest-article-summary">${escapeHtml(a.summary)}</div>
           ${factsHtml}
           ${a.comment ? `<div class="digest-article-comment">${escapeHtml(a.comment)}</div>` : ''}
-          ${a.citation ? `<div class="digest-article-citation">${escapeHtml(a.citation)}</div>` : ''}
+          ${citationLine ? `<div class="digest-article-citation">${citationLine}</div>` : ''}
         </div>
       `;
     }).join('');
@@ -760,6 +778,7 @@ export class NewsPanel extends Panel {
           ...article.keyFacts.map(f => `- ${f}`),
           article.comment ? `"${article.comment}"` : '',
           article.citation ? `Source: ${article.citation}` : '',
+          article.link || '',
         ].filter(Boolean).join('\n');
         navigator.clipboard.writeText(text).then(() => {
           const svg = btn.querySelector('svg');
