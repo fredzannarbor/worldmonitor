@@ -257,6 +257,14 @@ export class MapContainer {
     }
   }
 
+  public setLiteraryTodayAuthors(authors: import('@/services/literary-today').LiteraryTodayAuthor[]): void {
+    this.deckGLMap?.setLiteraryTodayAuthors(authors);
+  }
+
+  public setOpenLibraryBooks(books: import('@/services/open-library-live').OpenLibraryBook[]): void {
+    this.deckGLMap?.setOpenLibraryBooks(books);
+  }
+
   public setProtests(events: SocialUnrestEvent[]): void {
     if (this.useDeckGL) {
       this.deckGLMap?.setProtests(events);

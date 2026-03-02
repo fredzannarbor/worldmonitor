@@ -142,7 +142,15 @@
     "panelCatCentralBanks": "Central Banks & Econ",
     "panelCatDeals": "Deals & Institutional",
     "panelCatGulfMena": "Gulf & MENA",
-    "panelCatTradePolicy": "Trade Policy"
+    "panelCatTradePolicy": "Trade Policy",
+    "panelCatBooksCore": "Books & Publishing",
+    "panelCatBooksFeeds": "Book News",
+    "sourceRegionPublishingNews": "Publishing News",
+    "sourceRegionBookReviews": "Book Reviews",
+    "sourceRegionLiteraryAwards": "Literary Awards",
+    "sourceRegionIndustryAnalysis": "Industry Analysis",
+    "sourceRegionGlobalLiteracy": "Global Literacy",
+    "sourceRegionAuthorSpotlights": "Author Spotlights"
   },
   "panels": {
     "liveNews": "Live News",
@@ -2105,5 +2113,34 @@
     "retrying": "Retrying...",
     "refresh": "Refresh",
     "all": "All"
+  },
+  "books": {
+    "brandTitle": "Book-Lover's Global Dashboard",
+    "mapTitle": "Literary World Map",
+    "buildBook": "Build a Book",
+    "topic": "Topic",
+    "topicPlaceholder": "Enter a topic...",
+    "flavor": "Flavor",
+    "category": "Category",
+    "country": "Country",
+    "language": "Language",
+    "score": "Score",
+    "submit": "Build Book",
+    "optional": "Optional"
+  },
+  "publicDomain": {
+    "title": "Free Public Domain Books",
+    "searchPlaceholder": "Search books...",
+    "language": "Language",
+    "allLanguages": "All Languages",
+    "author": "Author",
+    "download": "Download",
+    "readOnline": "Read Online",
+    "noResults": "No books found",
+    "loading": "Loading books...",
+    "source": "Source",
+    "gutenberg": "Project Gutenberg",
+    "standardEbooks": "Standard Ebooks",
+    "internetArchive": "Internet Archive"
   }
 }

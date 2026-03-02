@@ -140,7 +140,17 @@ export const OPTIONAL_CHANNEL_REGIONS: { key: string; labelKey: string; channelI
   { key: 'africa', labelKey: 'components.liveNews.regionAfrica', channelIds: ['africanews', 'channels-tv', 'ktn-news', 'enca', 'sabc-news'] },
 ];
 
-const DEFAULT_LIVE_CHANNELS = SITE_VARIANT === 'tech' ? TECH_LIVE_CHANNELS : SITE_VARIANT === 'happy' ? [] : FULL_LIVE_CHANNELS;
+// Books variant: BookTube and publisher channels
+const BOOK_LIVE_CHANNELS: LiveChannel[] = [
+  { id: 'booktube-merphy', name: 'Merphy Napier', handle: '@MerphyNapier', fallbackVideoId: '_9u026wXeHM', useFallbackOnly: true },
+  { id: 'booktube-daniel-greene', name: 'Daniel Greene', handle: '@DanielGreeneReads', fallbackVideoId: '6ByfLux6ozo', useFallbackOnly: true },
+  { id: 'booktube-jack-edwards', name: 'Jack Edwards', handle: '@jackbenedwards', fallbackVideoId: '-8kY0reBBJU', useFallbackOnly: true },
+  { id: 'booktube-elliot-brooks', name: 'Elliot Brooks', handle: '@elliotbrooks', fallbackVideoId: 'CO9CoHiwuNA', useFallbackOnly: true },
+  { id: 'ted-ed-books', name: 'TED-Ed (Literature)', handle: '@TEDEd', fallbackVideoId: 'wxf_pKCOCBo', useFallbackOnly: true },
+  { id: 'google-talks-books', name: 'Talks at Google (Authors)', handle: '@talksatgoogle', fallbackVideoId: 'QMfw8OqroDs', useFallbackOnly: true },
+];
+
+const DEFAULT_LIVE_CHANNELS = SITE_VARIANT === 'books' ? BOOK_LIVE_CHANNELS : SITE_VARIANT === 'tech' ? TECH_LIVE_CHANNELS : SITE_VARIANT === 'happy' ? [] : FULL_LIVE_CHANNELS;
 
 /** Default channel list for the current variant (for restore in channel management). */
 export function getDefaultLiveChannels(): LiveChannel[] {

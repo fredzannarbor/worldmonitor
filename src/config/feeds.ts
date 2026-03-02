@@ -1025,8 +1025,46 @@ const HAPPY_FEEDS: Record<string, Feed[]> = {
   ],
 };
 
+// ============================================
+// BOOKS VARIANT (Publishing & Literary)
+// ============================================
+const BOOKS_FEEDS: Record<string, Feed[]> = {
+  'publishing-news': [
+    { name: 'Publishers Weekly', url: rss('https://www.publishersweekly.com/pw/feeds/recent/index.xml') },
+    { name: 'The Bookseller', url: rss('https://www.thebookseller.com/rss.xml') },
+    { name: 'Publishing Perspectives', url: rss('https://publishingperspectives.com/feed/') },
+  ],
+  'book-reviews': [
+    { name: 'Kirkus Reviews', url: rss('https://www.kirkusreviews.com/feeds/rss/') },
+    { name: 'BookPage', url: rss('https://www.bookpage.com/feed/') },
+    { name: 'Literary Hub', url: rss('https://lithub.com/feed/') },
+  ],
+  'literary-awards': [
+    { name: 'Nobel Prize', url: rss('https://www.nobelprize.org/feed/') },
+    { name: 'National Book Foundation', url: rss('https://www.nationalbook.org/feed/') },
+    { name: 'Booker Prize', url: rss('https://thebookerprizes.com/feed') },
+  ],
+  'industry-analysis': [
+    { name: 'Shelf Awareness', url: rss('https://www.shelf-awareness.com/rss/feed.xml') },
+    { name: 'Book Riot', url: rss('https://bookriot.com/feed/') },
+    { name: 'The Digital Reader', url: rss('https://the-digital-reader.com/feed/') },
+  ],
+  'global-literacy': [
+    { name: 'UNESCO News', url: rss('https://www.unesco.org/en/rss.xml') },
+    { name: 'IFLA', url: rss('https://www.ifla.org/feed/') },
+    { name: 'Reading Agency', url: rss('https://readingagency.org.uk/feed/') },
+  ],
+  'author-spotlights': [
+    { name: 'The Paris Review', url: rss('https://www.theparisreview.org/blog/feed/') },
+    { name: 'Granta', url: rss('https://granta.com/feed/') },
+    { name: 'Electric Literature', url: rss('https://electricliterature.com/feed/') },
+  ],
+};
+
 // Variant-aware exports
-export const FEEDS = SITE_VARIANT === 'tech'
+export const FEEDS = SITE_VARIANT === 'books'
+  ? BOOKS_FEEDS
+  : SITE_VARIANT === 'tech'
   ? TECH_FEEDS
   : SITE_VARIANT === 'finance'
     ? FINANCE_FEEDS

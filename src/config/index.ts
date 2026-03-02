@@ -115,3 +115,15 @@ export {
 
 // Gulf FDI investment database
 export { GULF_INVESTMENTS } from './gulf-fdi';
+
+// Book variant geo data
+export {
+  PUBLISHER_HQS,
+  BOOK_FAIRS,
+  MAJOR_LIBRARIES,
+  LITERARY_LANDMARKS,
+  type PublisherHQ,
+  type BookFair,
+  type MajorLibrary,
+  type LiteraryLandmark,
+} from './book-geo';
