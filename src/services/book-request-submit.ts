@@ -1,5 +1,3 @@
-const WEBHOOK_URL = import.meta.env.VITE_BOOK_REQUEST_WEBHOOK ?? '';
-
 export interface BookRequestParams {
   topic: string;
   codexType: string;
@@ -12,16 +10,15 @@ export interface BookRequestParams {
 }
 
 export async function submitBookRequest(params: BookRequestParams): Promise<boolean> {
-  if (!WEBHOOK_URL) return true; // graceful skip if not configured
   try {
-    const resp = await fetch(WEBHOOK_URL, {
+    const resp = await fetch('/api/book-request', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...params, timestamp: new Date().toISOString() }),
     });
     return resp.ok;
   } catch {
-    console.warn('[BookRequest] Webhook submission failed');
+    console.warn('[BookRequest] Submission failed');
     return false;
   }
 }

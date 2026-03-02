@@ -1,4 +1,4 @@
-const AUTH_API = import.meta.env.VITE_AUTH_API ?? 'http://localhost:8531';
+const AUTH_API = import.meta.env.VITE_AUTH_API ?? '';
 
 export interface User {
   username: string;

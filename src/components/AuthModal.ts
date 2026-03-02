@@ -10,6 +10,7 @@ export class AuthModal {
   private registerTab: HTMLButtonElement;
   private formContainer: HTMLDivElement;
   private submitBtn: HTMLButtonElement;
+  private titleEl: HTMLHeadingElement;
   private activeTab: 'login' | 'register' = 'login';
   private resolve: ((user: User | null) => void) | null = null;
 
@@ -27,9 +28,9 @@ export class AuthModal {
     this.modal.className = 'auth-modal';
 
     // Title
-    const title = document.createElement('h3');
-    title.textContent = 'Sign In';
-    this.modal.appendChild(title);
+    this.titleEl = document.createElement('h3');
+    this.titleEl.textContent = 'Sign In';
+    this.modal.appendChild(this.titleEl);
 
     // Tabs
     const tabs = document.createElement('div');
@@ -87,6 +88,7 @@ export class AuthModal {
     this.activeTab = tab;
     this.loginTab.className = tab === 'login' ? 'auth-tab active' : 'auth-tab';
     this.registerTab.className = tab === 'register' ? 'auth-tab active' : 'auth-tab';
+    this.titleEl.textContent = tab === 'login' ? 'Sign In' : 'Create Account';
     this.submitBtn.textContent = tab === 'login' ? 'Login' : 'Register';
     this.errorEl.style.display = 'none';
     this.renderForm();

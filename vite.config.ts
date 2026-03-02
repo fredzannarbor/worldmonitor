@@ -924,6 +924,15 @@ export default defineConfig({
       ],
     },
     proxy: {
+      // B5K Auth + Book Request API
+      '/auth': {
+        target: 'http://localhost:8531',
+        changeOrigin: true,
+      },
+      '/api/book-request': {
+        target: 'http://localhost:8531',
+        changeOrigin: true,
+      },
       // Yahoo Finance API
       '/api/yahoo': {
         target: 'https://query1.finance.yahoo.com',
