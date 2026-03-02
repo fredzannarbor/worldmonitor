@@ -701,14 +701,19 @@ export class NewsPanel extends Panel {
     const currentDate = dates[this.digestDateIndex]!;
     const articles = byDate.get(currentDate) ?? [];
 
-    const articlesHtml = articles.map(a => {
+    const articlesHtml = articles.map((a, idx) => {
       const factsHtml = a.keyFacts.length > 0
         ? `<ul class="digest-article-facts">${a.keyFacts.map(f => `<li>${escapeHtml(f)}</li>`).join('')}</ul>`
         : '';
 
       return `
-        <div class="digest-article">
-          <div class="digest-article-title"><a href="${sanitizeUrl(a.link)}" target="_blank" rel="noopener">${escapeHtml(a.title)}</a></div>
+        <div class="digest-article" data-digest-idx="${idx}">
+          <div class="digest-article-header">
+            <div class="digest-article-title">${escapeHtml(a.title)}</div>
+            <button class="digest-copy-btn" data-digest-idx="${idx}" title="Copy article">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
+          </div>
           <div class="digest-article-summary">${escapeHtml(a.summary)}</div>
           ${factsHtml}
           ${a.comment ? `<div class="digest-article-comment">${escapeHtml(a.comment)}</div>` : ''}
@@ -722,9 +727,9 @@ export class NewsPanel extends Panel {
     if (dates.length > 1) {
       paginationHtml = `
         <div class="digest-pagination">
-          <button class="digest-page-btn digest-prev" ${this.digestDateIndex >= dates.length - 1 ? 'disabled' : ''}>&laquo;</button>
+          <button class="digest-page-btn digest-prev" ${this.digestDateIndex >= dates.length - 1 ? 'disabled' : ''}>&lt;</button>
           <span class="digest-page-date">${escapeHtml(currentDate)}</span>
-          <button class="digest-page-btn digest-next" ${this.digestDateIndex <= 0 ? 'disabled' : ''}>&raquo;</button>
+          <button class="digest-page-btn digest-next" ${this.digestDateIndex <= 0 ? 'disabled' : ''}>&gt;</button>
         </div>
       `;
     }
@@ -741,6 +746,30 @@ export class NewsPanel extends Panel {
     nextBtn?.addEventListener('click', () => {
       this.digestDateIndex--;
       this.renderCurrentDigestPage();
+    });
+
+    // Bind copy button handlers
+    this.content.querySelectorAll('.digest-copy-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt((btn as HTMLElement).dataset.digestIdx ?? '0', 10);
+        const article = articles[idx];
+        if (!article) return;
+        const text = [
+          article.title,
+          article.summary,
+          ...article.keyFacts.map(f => `- ${f}`),
+          article.comment ? `"${article.comment}"` : '',
+          article.citation ? `Source: ${article.citation}` : '',
+        ].filter(Boolean).join('\n');
+        navigator.clipboard.writeText(text).then(() => {
+          const svg = btn.querySelector('svg');
+          if (svg) {
+            const orig = svg.style.color;
+            svg.style.color = 'var(--accent, #00d4aa)';
+            setTimeout(() => { svg.style.color = orig; }, 800);
+          }
+        });
+      });
     });
   }
 
