@@ -8,9 +8,21 @@ import { analysisWorker, enrichWithVelocityML, getClusterAssetContext, MAX_DISTA
 import { getSourcePropagandaRisk, getSourceTier, getSourceType } from '@/config/feeds';
 import { SITE_VARIANT } from '@/config';
 import { t, getCurrentLanguage } from '@/services/i18n';
+import { scoreBookWorthiness } from '@/services/book-worthiness';
+import { buildBookUrl } from '@/services/build-book-url';
 
 /** Threshold for enabling virtual scrolling */
 const VIRTUAL_SCROLL_THRESHOLD = 15;
+
+export interface DigestArticle {
+  date: string;
+  title: string;
+  summary: string;
+  keyFacts: string[];
+  comment: string;
+  citation: string;
+  link: string;
+}
 
 /** Summary cache TTL in milliseconds (10 minutes) */
 const SUMMARY_CACHE_TTL = 10 * 60 * 1000;
@@ -36,6 +48,10 @@ export class NewsPanel extends Panel {
   private renderRequestId = 0;
   private boundScrollHandler: (() => void) | null = null;
   private boundClickHandler: (() => void) | null = null;
+
+  // Digest pagination
+  private digestDateIndex = 0;
+  private digestArticles: DigestArticle[] = [];
 
   // Panel summary feature
   private summaryBtn: HTMLButtonElement | null = null;
@@ -529,6 +545,23 @@ export class NewsPanel extends Panel {
       ? `<span class="category-tag" style="color:${catColor};border-color:${catColor}40;background:${catColor}20">${catLabel}</span>`
       : '';
 
+    // Book-worthiness button (codexes variant only, score >= 60)
+    let buildBookBtn = '';
+    if (SITE_VARIANT === 'codexes') {
+      const worthiness = scoreBookWorthiness(cluster);
+      if (worthiness.score >= 60) {
+        const codexType = worthiness.recommendedFlavors[0] || 'lite-briefing';
+        const url = buildBookUrl({
+          topic: cluster.primaryTitle,
+          codexType,
+          score: worthiness.score,
+          sources: cluster.sourceCount,
+          category: cat,
+        });
+        buildBookBtn = `<button class="build-book-btn" data-url="${escapeHtml(url)}" title="Build a Book — ${escapeHtml(codexType)} (score ${worthiness.score})">📚 Build</button>`;
+      }
+    }
+
     // Build class list for item
     const itemClasses = [
       'item',
@@ -551,6 +584,7 @@ export class NewsPanel extends Panel {
           ${sentimentBadge}
           ${cluster.isAlert ? '<span class="alert-tag">ALERT</span>' : ''}
           ${categoryBadge}
+          ${buildBookBtn}
         </div>
         <a class="item-title" href="${sanitizeUrl(cluster.primaryLink)}" target="_blank" rel="noopener">${escapeHtml(cluster.primaryTitle)}</a>
         <div class="cluster-meta">
@@ -605,6 +639,17 @@ export class NewsPanel extends Panel {
         if (text) this.handleTranslate(btn, text);
       });
     });
+
+    // Build-a-book buttons (codexes variant)
+    const bookBtns = this.content.querySelectorAll<HTMLButtonElement>('.build-book-btn');
+    bookBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        const url = btn.dataset.url;
+        if (url) window.open(url, '_blank', 'noopener');
+      });
+    });
   }
 
   private getLocalizedAssetLabel(type: RelatedAsset['type']): string {
@@ -616,6 +661,87 @@ export class NewsPanel extends Panel {
       nuclear: 'modals.countryBrief.infra.nuclear',
     };
     return t(keyMap[type]);
+  }
+
+  /**
+   * Render digest articles with date-based pagination.
+   */
+  public renderDigestArticles(articles: DigestArticle[], _category: string): void {
+    this.digestArticles = articles;
+    this.digestDateIndex = 0;
+    this.setDataBadge('live');
+
+    if (articles.length === 0) {
+      this.setCount(0);
+      this.showError('No digest articles available');
+      return;
+    }
+
+    this.setCount(articles.length);
+    this.renderCurrentDigestPage();
+  }
+
+  private renderCurrentDigestPage(): void {
+    // Group articles by date
+    const byDate = new Map<string, DigestArticle[]>();
+    for (const a of this.digestArticles) {
+      const list = byDate.get(a.date) || [];
+      list.push(a);
+      byDate.set(a.date, list);
+    }
+
+    // Sort dates descending (most recent first)
+    const dates = [...byDate.keys()].sort((a, b) => b.localeCompare(a));
+    if (dates.length === 0) return;
+
+    // Clamp index
+    if (this.digestDateIndex < 0) this.digestDateIndex = 0;
+    if (this.digestDateIndex >= dates.length) this.digestDateIndex = dates.length - 1;
+
+    const currentDate = dates[this.digestDateIndex]!;
+    const articles = byDate.get(currentDate) ?? [];
+
+    const articlesHtml = articles.map(a => {
+      const factsHtml = a.keyFacts.length > 0
+        ? `<ul class="digest-article-facts">${a.keyFacts.map(f => `<li>${escapeHtml(f)}</li>`).join('')}</ul>`
+        : '';
+
+      return `
+        <div class="digest-article">
+          <div class="digest-article-title"><a href="${sanitizeUrl(a.link)}" target="_blank" rel="noopener">${escapeHtml(a.title)}</a></div>
+          <div class="digest-article-summary">${escapeHtml(a.summary)}</div>
+          ${factsHtml}
+          ${a.comment ? `<div class="digest-article-comment">${escapeHtml(a.comment)}</div>` : ''}
+          ${a.citation ? `<div class="digest-article-citation">${escapeHtml(a.citation)}</div>` : ''}
+        </div>
+      `;
+    }).join('');
+
+    // Pagination controls (only if multiple dates)
+    let paginationHtml = '';
+    if (dates.length > 1) {
+      paginationHtml = `
+        <div class="digest-pagination">
+          <button class="digest-page-btn digest-prev" ${this.digestDateIndex >= dates.length - 1 ? 'disabled' : ''}>&laquo;</button>
+          <span class="digest-page-date">${escapeHtml(currentDate)}</span>
+          <button class="digest-page-btn digest-next" ${this.digestDateIndex <= 0 ? 'disabled' : ''}>&raquo;</button>
+        </div>
+      `;
+    }
+
+    this.setContent(articlesHtml + paginationHtml);
+
+    // Bind pagination click handlers
+    const prevBtn = this.content.querySelector('.digest-prev');
+    const nextBtn = this.content.querySelector('.digest-next');
+    prevBtn?.addEventListener('click', () => {
+      this.digestDateIndex++;
+      this.renderCurrentDigestPage();
+    });
+    nextBtn?.addEventListener('click', () => {
+      this.digestDateIndex--;
+      this.renderCurrentDigestPage();
+    });
   }
 
   /**

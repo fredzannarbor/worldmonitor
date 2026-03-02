@@ -1,6 +1,8 @@
 import { escapeHtml, sanitizeUrl } from '@/utils/sanitize';
 import { t } from '@/services/i18n';
 import { getCSSColor } from '@/utils';
+import { SITE_VARIANT } from '@/config';
+import { buildBookUrl } from '@/services/build-book-url';
 import type { CountryScore } from '@/services/country-instability';
 import type { NewsItem } from '@/types';
 import type { PredictionMarket } from '@/services/prediction';
@@ -268,6 +270,9 @@ export class CountryBriefPage {
             ${tierBadge}
           </div>
           <div class="cb-header-right">
+            ${SITE_VARIANT === 'codexes' ? `
+              <button class="cb-build-book-btn" title="Build a Book about this country">📚</button>
+            ` : ''}
             <button class="cb-share-btn" title="${t('components.countryBrief.shareStory')}">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a2 2 0 002 2h12a2 2 0 002-2v-7"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
             </button>
@@ -359,6 +364,17 @@ export class CountryBriefPage {
       </div>`;
 
     this.overlay.querySelector('.cb-close')?.addEventListener('click', () => this.hide());
+    this.overlay.querySelector('.cb-build-book-btn')?.addEventListener('click', () => {
+      if (this.currentName && this.currentCode) {
+        const url = buildBookUrl({
+          topic: this.currentName,
+          codexType: 'executive-summary',
+          score: 70,
+          country: this.currentCode,
+        });
+        window.open(url, '_blank', 'noopener');
+      }
+    });
     this.overlay.querySelector('.cb-share-btn')?.addEventListener('click', () => {
       if (this.onShareStory && this.currentCode && this.currentName) {
         this.onShareStory(this.currentCode, this.currentName);

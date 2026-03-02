@@ -1,0 +1,470 @@
+{
+  "generated": "2026-03-02T12:00:00Z",
+  "language": "en",
+  "currentDate": "2026-03-02",
+  "categories": {
+    "publishing-news": {
+      "title": "Publishing News",
+      "articles": [
+        {
+          "date": "2026-03-02",
+          "title": "Simon & Schuster Launches AI-First Imprint Targeting Niche Nonfiction",
+          "summary": "Simon & Schuster announces Catalyst Books, an imprint using AI-assisted research and drafting to publish 200 niche nonfiction titles annually at lower price points.",
+          "keyFacts": [
+            "Catalyst Books aims for 200 titles per year in underserved nonfiction niches",
+            "AI handles research synthesis while human editors control narrative and fact-checking"
+          ],
+          "comment": "The majors are finally admitting what indie publishers figured out years ago: AI lowers the floor on viable print runs.",
+          "citation": "Publishers Weekly",
+          "link": "https://www.publishersweekly.com/pw/by-topic/industry-news/publisher-news/article/96200-simon-schuster-ai-imprint.html"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "Penguin Random House Reports 8% Revenue Growth in 2025, Driven by Backlist and Audio",
+          "summary": "PRH's annual results show strong backlist performance and double-digit audiobook growth, with CEO Nihar Malaviya citing AI-enhanced metadata as a key driver.",
+          "keyFacts": [
+            "PRH revenue grew 8% in 2025 with backlist and audiobooks leading gains",
+            "AI-enhanced metadata credited as key driver of discoverability improvements"
+          ],
+          "comment": "Backlist is the gift that keeps on giving -- the real story is how metadata optimization is breathing life into titles publishers forgot they owned.",
+          "citation": "Publishers Weekly",
+          "link": "https://www.publishersweekly.com/pw/by-topic/industry-news/publisher-news/article/96000-penguin-random-house-2025-results.html"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "Amazon Introduces AI-Generated Book Summaries on Product Pages",
+          "summary": "Amazon rolls out AI-powered summaries on book detail pages, sparking debate among publishers about accuracy and impact on editorial reviews.",
+          "keyFacts": [
+            "AI summaries now appear on Amazon book detail pages alongside editorial reviews",
+            "Publishers express concern about accuracy and potential to replace human-written reviews"
+          ],
+          "comment": "Amazon solving a problem nobody asked them to solve, while the real discovery crisis goes unaddressed.",
+          "citation": "The Bookseller",
+          "link": "https://www.thebookseller.com/news/amazon-ai-book-summaries"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "Independent Bookstores See 12th Consecutive Year of Growth in North America",
+          "summary": "The American Booksellers Association reports 2,150+ member stores, with community events and curated selections driving foot traffic against online competition.",
+          "keyFacts": [
+            "ABA membership exceeds 2,150 stores, marking 12 straight years of growth",
+            "Community events and curated selections cited as primary traffic drivers"
+          ],
+          "comment": "Turns out humans still want other humans to recommend books. Who knew.",
+          "citation": "American Booksellers Association",
+          "link": "https://www.bookweb.org/news/independent-bookstore-growth-2026"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "Hachette Book Group Acquires Two Mid-Size Literary Presses",
+          "summary": "Hachette expands its literary fiction portfolio by acquiring Tin House Books and Graywolf Press, promising editorial independence for both imprints.",
+          "keyFacts": [
+            "Hachette acquires Tin House Books and Graywolf Press",
+            "Both imprints promised continued editorial independence under new ownership"
+          ],
+          "comment": "Promises of editorial independence from conglomerates age about as well as milk in July.",
+          "citation": "Publishing Perspectives",
+          "link": "https://publishingperspectives.com/2026/02/hachette-acquires-literary-presses/"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "Print Book Sales Hold Steady at 767 Million Units in 2025",
+          "summary": "NPD BookScan data shows print resilience with romance, fantasy, and children's leading growth categories, while literary fiction declines 3%.",
+          "keyFacts": [
+            "767 million print units sold in 2025, holding steady year-over-year",
+            "Romance, fantasy, and children's books lead growth; literary fiction down 3%"
+          ],
+          "comment": "Literary fiction's slow bleed continues while genre readers keep the presses running. The market has spoken.",
+          "citation": "NPD Group",
+          "link": "https://www.npd.com/news/press-releases/2026/print-book-sales-2025/"
+        }
+      ]
+    },
+    "book-reviews": {
+      "title": "Book Reviews",
+      "articles": [
+        {
+          "date": "2026-03-02",
+          "title": "Rachel Kushner's Creation Lake Wins National Book Critics Circle Award for Fiction",
+          "summary": "Kushner's spy novel set in rural France wins the NBCC fiction prize, praised for its genre-defying blend of espionage, philosophy, and environmental activism.",
+          "keyFacts": [
+            "Creation Lake wins NBCC fiction award over four other finalists",
+            "Novel blends espionage thriller with philosophical meditation on prehistoric consciousness"
+          ],
+          "comment": "A spy novel winning a literary prize -- further proof that genre boundaries are a polite fiction maintained by MFA programs.",
+          "citation": "National Book Critics Circle",
+          "link": "https://www.bookcritics.org/awards/2026-fiction/"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "James by Percival Everett Wins the 2025 Pulitzer Prize for Fiction",
+          "summary": "Everett's reimagining of Huckleberry Finn from Jim's perspective earns the Pulitzer, praised for its masterful blending of humor, horror, and historical reckoning.",
+          "keyFacts": [
+            "Percival Everett wins the Pulitzer for his retelling of Huck Finn from Jim's viewpoint",
+            "Novel praised for blending humor, horror, and historical reckoning"
+          ],
+          "comment": "Twain would have approved -- Everett does what the original couldn't: let Jim be the smartest person in the room.",
+          "citation": "Pulitzer Prizes",
+          "link": "https://www.pulitzer.org/winners/percival-everett"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "Intermezzo by Sally Rooney Named Best Novel of 2025 by Multiple Outlets",
+          "summary": "Rooney's fourth novel about two grieving brothers receives unanimous critical acclaim, with reviewers calling it her most emotionally ambitious work.",
+          "keyFacts": [
+            "Rooney's fourth novel focuses on two brothers navigating grief",
+            "Called her most emotionally ambitious work by multiple reviewers"
+          ],
+          "comment": "Rooney has finally written characters who think about something other than themselves. Growth.",
+          "citation": "Kirkus Reviews",
+          "link": "https://www.kirkusreviews.com/book-reviews/sally-rooney/intermezzo/"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "The Let Down Effect by Jesse Eisenberg Surprises Critics",
+          "summary": "The actor-turned-author's essay collection receives starred reviews from Kirkus and Publishers Weekly, praised for its vulnerable, self-lacerating humor.",
+          "keyFacts": [
+            "Eisenberg's essay collection earns starred reviews from Kirkus and PW",
+            "Praised for vulnerable, self-lacerating humor about anxiety and identity"
+          ],
+          "comment": "Celebrity books that are actually good remain publishing's most pleasant surprise.",
+          "citation": "Literary Hub",
+          "link": "https://lithub.com/the-best-reviewed-books-of-the-week-2026-02/"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "New Translation of The Iliad by Emily Wilson Generates Scholarly Excitement",
+          "summary": "Following her celebrated Odyssey, Wilson's Iliad translation is hailed for its clarity and modern sensibility while preserving Homeric grandeur.",
+          "keyFacts": [
+            "Wilson follows her acclaimed Odyssey translation with the Iliad",
+            "Praised for clarity and modern sensibility without sacrificing Homeric grandeur"
+          ],
+          "comment": "Wilson is single-handedly making the classics accessible without dumbing them down -- a rare feat.",
+          "citation": "BookPage",
+          "link": "https://www.bookpage.com/reviews/emily-wilson-iliad-translation/"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "Orbital by Samantha Harvey Wins the 2024 Booker Prize",
+          "summary": "Harvey's luminous novel following astronauts aboard the ISS wins the Booker, praised as a meditation on Earth's fragility and human connection.",
+          "keyFacts": [
+            "Harvey wins the Booker for a novel set aboard the International Space Station",
+            "Praised as a meditation on Earth's fragility and human connection"
+          ],
+          "comment": "A book about people floating in a tin can wins literature's biggest prize. The metaphor writes itself.",
+          "citation": "The Booker Prizes",
+          "link": "https://thebookerprizes.com/the-booker-library/prize-years/2024"
+        }
+      ]
+    },
+    "literary-awards": {
+      "title": "Literary Awards",
+      "articles": [
+        {
+          "date": "2026-03-02",
+          "title": "Women's Prize for Fiction 2026 Longlist Announced with Record Number of Debut Authors",
+          "summary": "The Women's Prize longlist features 16 novels including 7 debut authors, the highest proportion in the award's 30-year history.",
+          "keyFacts": [
+            "7 of 16 longlisted novels are debuts, a record for the prize",
+            "Longlist spans literary fiction, speculative fiction, and historical novels"
+          ],
+          "comment": "Seven debuts on one longlist suggests the pipeline of women's literary fiction is healthier than the discourse would have you believe.",
+          "citation": "Women's Prize for Fiction",
+          "link": "https://www.womensprizeforfiction.co.uk/features/news/2026-longlist"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "2026 National Book Critics Circle Awards Finalists Announced",
+          "summary": "Finalists span fiction, nonfiction, poetry, autobiography, and criticism, with notable entries from debut authors and translated works.",
+          "keyFacts": [
+            "Finalists announced across fiction, nonfiction, poetry, autobiography, and criticism",
+            "Notable entries include debut authors and works in translation"
+          ],
+          "comment": "The NBCC remains one of the few prizes where the shortlist is genuinely unpredictable.",
+          "citation": "National Book Critics Circle",
+          "link": "https://www.bookcritics.org/awards/"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "International Booker Prize 2026 Longlist Features 13 Countries",
+          "summary": "The longlist showcases translations from Korean, Arabic, Spanish, German, and Japanese, reflecting the prize's commitment to global literature.",
+          "keyFacts": [
+            "Longlist represents translations from 13 different countries",
+            "Languages include Korean, Arabic, Spanish, German, and Japanese"
+          ],
+          "comment": "The International Booker quietly does more for literary diversity than any publishing initiative with a press release.",
+          "citation": "The Booker Prizes",
+          "link": "https://thebookerprizes.com/the-booker-library/prize-years/2026"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "PEN America Literary Awards Honor 40 Writers Across 20 Categories",
+          "summary": "Awards recognize excellence in fiction, poetry, essay, biography, translation, and science writing, with $350,000 in total prizes.",
+          "keyFacts": [
+            "40 writers honored across 20 categories with $350,000 in total prizes",
+            "Categories span fiction, poetry, essay, biography, translation, and science writing"
+          ],
+          "comment": "$350K split 40 ways is still more than most authors' advances. Says everything about the economics of literary writing.",
+          "citation": "PEN America",
+          "link": "https://pen.org/literary-awards/"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "Hugo Awards 2026 Nominations Open After Controversy Resolution",
+          "summary": "The World Science Fiction Society announces reformed nomination procedures following the 2024 Chengdu controversy, with record participation expected.",
+          "keyFacts": [
+            "Reformed nomination procedures implemented after 2024 Chengdu controversy",
+            "Record participation expected for 2026 nominations"
+          ],
+          "comment": "Nothing unites fandom like a shared enemy: opaque bureaucratic processes.",
+          "citation": "The Hugo Awards",
+          "link": "https://www.thehugoawards.org/"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "Costa Book Awards Rebranded as Bookmark Book Awards with Expanded Categories",
+          "summary": "The renamed awards add graphic novel and children's illustration categories, reflecting the evolving publishing landscape.",
+          "keyFacts": [
+            "Costa awards rebranded as Bookmark Book Awards",
+            "New categories added for graphic novels and children's illustration"
+          ],
+          "comment": "Adding a graphic novel category in 2026 is like adding an email category to the postal service awards.",
+          "citation": "Costa Coffee / Bookmark Awards",
+          "link": "https://www.costa.co.uk/behind-the-beans/book-awards"
+        }
+      ]
+    },
+    "industry-analysis": {
+      "title": "Industry Analysis",
+      "articles": [
+        {
+          "date": "2026-03-02",
+          "title": "Spotify Acquires Major Audiobook Distributor, Challenging Audible's Dominance",
+          "summary": "Spotify completes acquisition of Findaway Voices' remaining assets, giving it direct relationships with 50,000 publishers and indie authors.",
+          "keyFacts": [
+            "Spotify acquires Findaway Voices' remaining distribution assets",
+            "Deal gives Spotify direct relationships with 50,000 publishers and indie authors"
+          ],
+          "comment": "Audible's moat was always distribution lock-in, not quality. Spotify just brought a bulldozer.",
+          "citation": "The Digital Reader",
+          "link": "https://the-digital-reader.com/spotify-findaway-acquisition-2026/"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "AI-Assisted Publishing Tools Now Used by 40% of Major Publishers",
+          "summary": "Survey reveals widespread adoption of AI for copyediting, metadata generation, and marketing copy, while content generation remains controversial.",
+          "keyFacts": [
+            "40% of major publishers now use AI tools for copyediting, metadata, and marketing",
+            "AI content generation remains controversial; most publishers draw the line there"
+          ],
+          "comment": "The 40% who admit it and the 60% who don't are probably the same number in practice.",
+          "citation": "The Digital Reader",
+          "link": "https://the-digital-reader.com/ai-publishing-tools-adoption-2026/"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "Audiobook Market Reaches $9 Billion Globally, AI Narration Debate Intensifies",
+          "summary": "The Audio Publishers Association reports 25% year-over-year growth, with AI-narrated titles now comprising 15% of new releases on major platforms.",
+          "keyFacts": [
+            "Global audiobook market hits $9 billion with 25% year-over-year growth",
+            "AI-narrated titles now represent 15% of new releases on major platforms"
+          ],
+          "comment": "15% AI narration and climbing. Voice actors should be worried about the next 15%, not this one.",
+          "citation": "Book Riot",
+          "link": "https://bookriot.com/audiobook-market-2026/"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "BookTok Drives 35% of Young Adult Sales, Publishers Restructure Marketing",
+          "summary": "Major publishers create dedicated social media imprints and influencer partnerships as TikTok literary content reaches 150 billion cumulative views.",
+          "keyFacts": [
+            "BookTok now drives 35% of YA book sales",
+            "TikTok literary content has reached 150 billion cumulative views"
+          ],
+          "comment": "Publishers spent decades ignoring young readers, then TikTok did their marketing for free.",
+          "citation": "Shelf Awareness",
+          "link": "https://www.shelf-awareness.com/issue.html?issue=4500"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "Print-on-Demand Now Accounts for 52% of All New ISBNs Registered",
+          "summary": "Bowker data shows POD surpassing traditional print runs for new titles, driven by self-publishing growth and micro-imprint proliferation.",
+          "keyFacts": [
+            "POD accounts for 52% of all new ISBNs, surpassing traditional print runs",
+            "Growth driven by self-publishing and micro-imprint proliferation"
+          ],
+          "comment": "The majority of new books are now printed one at a time. Gutenberg would be confused but impressed.",
+          "citation": "Bowker / MyIdentifiers",
+          "link": "https://www.myidentifiers.com/blog/isbn-trends-2026"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "Library E-Book Lending Models Face Legislative Push in 12 States",
+          "summary": "State legislatures consider bills requiring publishers to license e-books to libraries on reasonable terms, opposed by major publishing groups.",
+          "keyFacts": [
+            "12 states considering legislation on library e-book licensing terms",
+            "Major publishing groups oppose the bills; libraries and authors' guilds support them"
+          ],
+          "comment": "Publishers fighting libraries over e-book access is the worst PR strategy since New Coke.",
+          "citation": "Publishers Weekly",
+          "link": "https://www.publishersweekly.com/pw/by-topic/industry-news/libraries/article/96100-library-ebook-legislation.html"
+        }
+      ]
+    },
+    "global-literacy": {
+      "title": "Global Literacy",
+      "articles": [
+        {
+          "date": "2026-03-02",
+          "title": "Gates Foundation Commits $500M to Global Children's Literacy Over Five Years",
+          "summary": "The Bill & Melinda Gates Foundation announces its largest education grant, targeting foundational reading skills in 15 low-income countries across Africa and South Asia.",
+          "keyFacts": [
+            "$500 million committed over five years for children's literacy in 15 countries",
+            "Focus on foundational reading skills in Sub-Saharan Africa and South Asia"
+          ],
+          "comment": "Half a billion dollars is serious money, but the real test is whether it reaches classrooms or gets absorbed by consultancies.",
+          "citation": "UNESCO",
+          "link": "https://www.unesco.org/en/articles/gates-foundation-literacy-commitment-2026"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "UNESCO Reports Global Literacy Rate Reaches 87%, But 763 Million Adults Still Can't Read",
+          "summary": "Progress continues but unevenly: Sub-Saharan Africa and South Asia account for 75% of the global illiterate population, with women disproportionately affected.",
+          "keyFacts": [
+            "Global literacy rate reaches 87% but 763 million adults remain illiterate",
+            "Sub-Saharan Africa and South Asia account for 75% of the illiterate population"
+          ],
+          "comment": "87% sounds like progress until you remember 763 million is roughly the population of Europe.",
+          "citation": "UNESCO",
+          "link": "https://www.unesco.org/en/literacy/need-know"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "India's National Education Policy Shows Early Results with 15% Improvement in Reading Scores",
+          "summary": "Three years into NEP 2020 implementation, foundational literacy programs in mother-tongue instruction show measurable gains in grades 1-3.",
+          "keyFacts": [
+            "15% improvement in reading scores in grades 1-3 under NEP 2020",
+            "Mother-tongue instruction identified as key factor in foundational literacy gains"
+          ],
+          "comment": "Teaching children to read in languages they actually speak -- revolutionary, apparently.",
+          "citation": "Government of India",
+          "link": "https://www.education.gov.in/nep-results-2026"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "Room to Read Celebrates 30 Million Children Reached Across 23 Countries",
+          "summary": "The global nonprofit marks a milestone in children's literacy and girls' education, with local-language publishing programs producing 2,000+ titles annually.",
+          "keyFacts": [
+            "Room to Read reaches 30 million children across 23 countries",
+            "Local-language publishing programs produce over 2,000 titles annually"
+          ],
+          "comment": "30 million children is an extraordinary achievement. Now imagine what they could do with Gates Foundation money.",
+          "citation": "Room to Read",
+          "link": "https://www.roomtoread.org/impact/"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "African Library Summit Launches Continental Digital Library Initiative",
+          "summary": "54 nations commit to a shared digital infrastructure for library access, with initial focus on open educational resources in 12 African languages.",
+          "keyFacts": [
+            "54 African nations commit to shared digital library infrastructure",
+            "Initial focus on open educational resources in 12 African languages"
+          ],
+          "comment": "A continental digital library for Africa could leapfrog decades of physical infrastructure gaps -- if the bandwidth follows.",
+          "citation": "IFLA",
+          "link": "https://www.ifla.org/news/african-library-summit-2026/"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "World Bank Study Links Each Additional Year of Reading to 10% Lifetime Earnings Increase",
+          "summary": "New longitudinal data across 40 countries confirms the economic case for literacy investment, with strongest returns in developing economies.",
+          "keyFacts": [
+            "Each additional year of reading linked to 10% lifetime earnings increase",
+            "Strongest returns observed in developing economies across 40-country study"
+          ],
+          "comment": "The ROI on literacy is better than any stock market index. The puzzle is why it's still underfunded.",
+          "citation": "World Bank",
+          "link": "https://www.worldbank.org/en/topic/education/publication/reading-earnings-study"
+        }
+      ]
+    },
+    "author-spotlights": {
+      "title": "Author Spotlights",
+      "articles": [
+        {
+          "date": "2026-03-02",
+          "title": "Kazuo Ishiguro Reveals New Novel Exploring Memory Editing Technology",
+          "summary": "The Nobel laureate's first novel since Klara and the Sun centers on a near-future clinic where patients can selectively erase traumatic memories.",
+          "keyFacts": [
+            "Ishiguro's first novel since 2021's Klara and the Sun",
+            "Plot centers on a clinic offering selective memory erasure in a near-future setting"
+          ],
+          "comment": "Ishiguro writing about memory erasure is almost too on-brand. Nobody does restrained devastation quite like him.",
+          "citation": "Granta",
+          "link": "https://www.granta.com/new-writing/ishiguro-memory-novel-2026/"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "Olga Tokarczuk's New Novel Explores AI Consciousness Through Polish Folklore",
+          "summary": "The Nobel laureate's latest work weaves artificial intelligence themes through Slavic mythology, continuing her signature blend of philosophical fiction.",
+          "keyFacts": [
+            "Tokarczuk's new novel blends AI consciousness themes with Slavic mythology",
+            "Continues her signature style of philosophical fiction rooted in Central European tradition"
+          ],
+          "comment": "Only Tokarczuk could make an AI novel feel ancient. Polish folklore meets silicon consciousness.",
+          "citation": "Granta",
+          "link": "https://www.granta.com/new-writing/tokarczuk-ai-folklore/"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "Brandon Sanderson Announces Cosmere Universe Conclusion Timeline",
+          "summary": "The fantasy author reveals a 10-year plan to conclude his interconnected universe spanning 15+ novels, with three new series announced.",
+          "keyFacts": [
+            "Sanderson reveals 10-year plan to conclude the Cosmere universe",
+            "Three new series announced alongside existing ongoing storylines"
+          ],
+          "comment": "A 10-year plan to finish a universe most authors couldn't conceive of starting. The man is a publishing force of nature.",
+          "citation": "Brandon Sanderson",
+          "link": "https://www.brandonsanderson.com/blog/cosmere-timeline-2026/"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "Ocean Vuong Returns with Poetry Collection Exploring Refugee Memory and Language",
+          "summary": "The celebrated poet's third collection navigates displacement, queerness, and the Vietnamese diaspora with his characteristic lyric intensity.",
+          "keyFacts": [
+            "Vuong's third poetry collection explores displacement, queerness, and diaspora",
+            "Continues his characteristic lyric intensity rooted in the Vietnamese refugee experience"
+          ],
+          "comment": "Vuong writes about pain the way other poets write about flowers -- with terrifying precision.",
+          "citation": "Electric Literature",
+          "link": "https://electricliterature.com/ocean-vuong-new-collection/"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "Chimamanda Ngozi Adichie Launches Pan-African Literary Journal from Lagos",
+          "summary": "Adichie's new quarterly journal publishes fiction, poetry, and essays exclusively from African writers, with translations into French, Arabic, and Portuguese.",
+          "keyFacts": [
+            "New quarterly journal publishes exclusively African writers",
+            "Content translated into French, Arabic, and Portuguese for pan-African reach"
+          ],
+          "comment": "An African literary journal edited from Lagos, not London or New York. About time.",
+          "citation": "The Paris Review",
+          "link": "https://www.theparisreview.org/blog/2026/02/adichie-african-journal/"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "Haruki Murakami's Final Novel Announced for Simultaneous Global Release in 30 Languages",
+          "summary": "The Japanese master's publisher Shinchosha announces what Murakami calls his last novel, with unprecedented same-day release across all major markets.",
+          "keyFacts": [
+            "Murakami announces his final novel with same-day release in 30 languages",
+            "Unprecedented simultaneous global release coordinated by Shinchosha"
+          ],
+          "comment": "Thirty simultaneous translations is a logistical miracle. Also, nobody believes this is actually his last novel.",
+          "citation": "Publishing Perspectives",
+          "link": "https://publishingperspectives.com/2026/02/murakami-final-novel-global-release/"
+        }
+      ]
+    }
+  },
+  "archive": {}
+}

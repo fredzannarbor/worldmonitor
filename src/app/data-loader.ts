@@ -112,6 +112,7 @@ import {
   TelegramIntelPanel,
 } from '@/components';
 import { SatelliteFiresPanel } from '@/components/SatelliteFiresPanel';
+import type { DigestArticle } from '@/components/NewsPanel';
 import { classifyNewsItem } from '@/services/positive-classifier';
 import { fetchGivingSummary } from '@/services/giving';
 import { GivingPanel } from '@/components';
@@ -257,8 +258,8 @@ export class DataLoaderManager implements AppModule {
       { name: 'news', task: runGuarded('news', () => this.loadNews()) },
     ];
 
-    // Happy variant only loads news data -- skip all geopolitical/financial/military data
-    if (SITE_VARIANT !== 'happy') {
+    // Happy and Books variants only load news data -- skip all geopolitical/financial/military data
+    if (SITE_VARIANT !== 'happy' && SITE_VARIANT !== 'books') {
       tasks.push({ name: 'markets', task: runGuarded('markets', () => this.loadMarkets()) });
       tasks.push({ name: 'predictions', task: runGuarded('predictions', () => this.loadPredictions()) });
       tasks.push({ name: 'pizzint', task: runGuarded('pizzint', () => this.loadPizzInt()) });
@@ -323,6 +324,26 @@ export class DataLoaderManager implements AppModule {
       tasks.push({ name: 'intelligence', task: runGuarded('intelligence', () => this.loadIntelligenceSignals()) });
     }
 
+    // Books variant: live map data (literary today + open library)
+    if (SITE_VARIANT === 'books') {
+      tasks.push({
+        name: 'literaryToday',
+        task: runGuarded('literaryToday', async () => {
+          const { fetchLiteraryToday } = await import('@/services/literary-today');
+          const authors = await fetchLiteraryToday();
+          this.ctx.map?.setLiteraryTodayAuthors(authors);
+        }),
+      });
+      tasks.push({
+        name: 'openLibraryLive',
+        task: runGuarded('openLibraryLive', async () => {
+          const { fetchOpenLibraryLive } = await import('@/services/open-library-live');
+          const books = await fetchOpenLibraryLive();
+          this.ctx.map?.setOpenLibraryBooks(books);
+        }),
+      });
+    }
+
     if (SITE_VARIANT === 'full') tasks.push({ name: 'firms', task: runGuarded('firms', () => this.loadFirmsData()) });
     if (this.ctx.mapLayers.natural) tasks.push({ name: 'natural', task: runGuarded('natural', () => this.loadNatural()) });
     if (SITE_VARIANT !== 'happy' && this.ctx.mapLayers.weather) tasks.push({ name: 'weather', task: runGuarded('weather', () => this.loadWeatherAlerts()) });
@@ -331,7 +352,7 @@ export class DataLoaderManager implements AppModule {
     if (SITE_VARIANT !== 'happy' && this.ctx.mapLayers.cables) tasks.push({ name: 'cableHealth', task: runGuarded('cableHealth', () => this.loadCableHealth()) });
     if (SITE_VARIANT !== 'happy' && this.ctx.mapLayers.flights) tasks.push({ name: 'flights', task: runGuarded('flights', () => this.loadFlightDelays()) });
     if (SITE_VARIANT !== 'happy' && CYBER_LAYER_ENABLED && this.ctx.mapLayers.cyberThreats) tasks.push({ name: 'cyberThreats', task: runGuarded('cyberThreats', () => this.loadCyberThreats()) });
-    if (SITE_VARIANT !== 'happy') tasks.push({ name: 'iranAttacks', task: runGuarded('iranAttacks', () => this.loadIranEvents()) });
+    if (SITE_VARIANT !== 'happy' && SITE_VARIANT !== 'books') tasks.push({ name: 'iranAttacks', task: runGuarded('iranAttacks', () => this.loadIranEvents()) });
     if (SITE_VARIANT !== 'happy' && (this.ctx.mapLayers.techEvents || SITE_VARIANT === 'tech')) tasks.push({ name: 'techEvents', task: runGuarded('techEvents', () => this.loadTechEvents()) });
 
     if (SITE_VARIANT === 'tech') {
@@ -668,7 +689,54 @@ export class DataLoaderManager implements AppModule {
     }
   }
 
+  /**
+   * Load book digest JSON for the books variant instead of RSS feeds.
+   * Fetches pre-generated digest from public/data/book-digests/{lang}.json,
+   * falling back to en.json if the current language isn't available.
+   */
+  private async loadBookDigests(): Promise<void> {
+    const lang = getCurrentLanguage();
+    const basePath = `${import.meta.env.BASE_URL || '/'}data/book-digests`;
+
+    let data: { categories: Record<string, { title: string; articles: DigestArticle[] }> } | null = null;
+
+    // Try language-specific digest first, fall back to English
+    for (const tryLang of lang !== 'en' ? [lang, 'en'] : ['en']) {
+      try {
+        const resp = await fetch(`${basePath}/${tryLang}.json`);
+        if (resp.ok) {
+          data = await resp.json();
+          break;
+        }
+      } catch { /* try next */ }
+    }
+
+    if (!data?.categories) {
+      console.warn('[BookDigest] No digest data available');
+      return;
+    }
+
+    for (const [category, digest] of Object.entries(data.categories)) {
+      const panel = this.ctx.newsPanels[category];
+      if (!panel) continue;
+
+      // Use new digest article rendering
+      panel.renderDigestArticles(digest.articles, category);
+
+      this.ctx.statusPanel?.updateFeed(
+        category.charAt(0).toUpperCase() + category.slice(1),
+        { status: 'ok', itemCount: digest.articles.length }
+      );
+    }
+  }
+
   async loadNews(): Promise<void> {
+    // Books variant: load from pre-generated digest JSON instead of RSS
+    if (SITE_VARIANT === 'books') {
+      await this.loadBookDigests();
+      return;
+    }
+
     // Reset happy variant accumulator for fresh pipeline run
     if (SITE_VARIANT === 'happy') {
       this.ctx.happyAllItems = [];

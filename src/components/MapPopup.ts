@@ -13,8 +13,10 @@ import { fetchHotspotContext, formatArticleDate, extractDomain, type GdeltArticl
 import { getNaturalEventIcon } from '@/services/eonet';
 import { getHotspotEscalation, getEscalationChange24h } from '@/services/hotspot-escalation';
 import { getCableHealthRecord } from '@/services/cable-health';
+import { SITE_VARIANT } from '@/config';
+import { buildBookUrl } from '@/services/build-book-url';
 
-export type PopupType = 'conflict' | 'hotspot' | 'earthquake' | 'weather' | 'base' | 'waterway' | 'apt' | 'cyberThreat' | 'nuclear' | 'economic' | 'irradiator' | 'pipeline' | 'cable' | 'cable-advisory' | 'repair-ship' | 'outage' | 'datacenter' | 'datacenterCluster' | 'ais' | 'protest' | 'protestCluster' | 'flight' | 'militaryFlight' | 'militaryVessel' | 'militaryFlightCluster' | 'militaryVesselCluster' | 'natEvent' | 'port' | 'spaceport' | 'mineral' | 'startupHub' | 'cloudRegion' | 'techHQ' | 'accelerator' | 'techEvent' | 'techHQCluster' | 'techEventCluster' | 'techActivity' | 'geoActivity' | 'stockExchange' | 'financialCenter' | 'centralBank' | 'commodityHub' | 'iranEvent' | 'gpsJamming';
+export type PopupType = 'conflict' | 'hotspot' | 'earthquake' | 'weather' | 'base' | 'waterway' | 'apt' | 'cyberThreat' | 'nuclear' | 'economic' | 'irradiator' | 'pipeline' | 'cable' | 'cable-advisory' | 'repair-ship' | 'outage' | 'datacenter' | 'datacenterCluster' | 'ais' | 'protest' | 'protestCluster' | 'flight' | 'militaryFlight' | 'militaryVessel' | 'militaryFlightCluster' | 'militaryVesselCluster' | 'natEvent' | 'port' | 'spaceport' | 'mineral' | 'startupHub' | 'cloudRegion' | 'techHQ' | 'accelerator' | 'techEvent' | 'techHQCluster' | 'techEventCluster' | 'techActivity' | 'geoActivity' | 'stockExchange' | 'financialCenter' | 'centralBank' | 'commodityHub' | 'iranEvent' | 'gpsJamming' | 'publisherHQ' | 'bookFair' | 'library' | 'literaryLandmark' | 'literaryToday' | 'openLibraryBook';
 
 interface TechEventPopupData {
   id: string;
@@ -154,6 +156,7 @@ export class MapPopup {
   private container: HTMLElement;
   private popup: HTMLElement | null = null;
   private onClose?: () => void;
+  private onBuildBook?: (topic: string) => void;
   private cableAdvisories: CableAdvisory[] = [];
   private repairShips: RepairShip[] = [];
   private isMobileSheet = false;
@@ -195,6 +198,22 @@ export class MapPopup {
     // Close button handler
     this.popup.querySelector('.popup-close')?.addEventListener('click', () => this.hide());
     this.popup.querySelector('.map-popup-sheet-handle')?.addEventListener('click', () => this.hide());
+
+    // Build-a-book button (codexes variant)
+    const bookBtn = this.popup.querySelector<HTMLButtonElement>('.popup-build-book-btn');
+    if (bookBtn) {
+      bookBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const topic = bookBtn.dataset.topic || '';
+        const url = buildBookUrl({
+          topic,
+          codexType: 'deep-history',
+          score: 70,
+        });
+        window.open(url, '_blank', 'noopener');
+        this.onBuildBook?.(topic);
+      });
+    }
 
     if (this.isMobileSheet) {
       this.popup.addEventListener('touchstart', this.handleSheetTouchStart, { passive: true });
@@ -363,6 +382,10 @@ export class MapPopup {
     this.onClose = callback;
   }
 
+  public setOnBuildBook(callback: (topic: string) => void): void {
+    this.onBuildBook = callback;
+  }
+
   public setCableActivity(advisories: CableAdvisory[], repairShips: RepairShip[]): void {
     this.cableAdvisories = advisories;
     this.repairShips = repairShips;
@@ -456,9 +479,32 @@ export class MapPopup {
         return this.renderIranEventPopup(data.data as IranEventPopupData);
       case 'gpsJamming':
         return this.renderGpsJammingPopup(data.data as GpsJammingPopupData);
+      case 'publisherHQ':
+      case 'bookFair':
+      case 'library':
+      case 'literaryLandmark':
+        return this.renderBookGeoPopup(data.type, data.data as { name: string; city: string; country: string; description?: string; url?: string });
       default:
         return '';
     }
+  }
+
+  private renderBookGeoPopup(type: string, data: { name: string; city: string; country: string; description?: string; url?: string }): string {
+    const icons: Record<string, string> = { publisherHQ: '🏢', bookFair: '📖', library: '🏛️', literaryLandmark: '✒️' };
+    const icon = icons[type] ?? '📚';
+    const desc = data.description ? `<div class="popup-row"><span class="popup-label">${escapeHtml(data.description)}</span></div>` : '';
+    const link = data.url ? `<div class="popup-row"><a href="${escapeHtml(data.url)}" target="_blank" rel="noopener">Learn more</a></div>` : '';
+    const buildBtn = (SITE_VARIANT === 'books' || SITE_VARIANT === 'codexes')
+      ? `<div class="popup-row"><a class="build-book-btn" href="${escapeHtml(buildBookUrl({ topic: data.name, codexType: 'deep-history', score: 5, country: data.country }))}" target="_blank" rel="noopener">📚 Build</a></div>`
+      : '';
+    return `
+      <div class="popup-header">
+        <span class="popup-icon">${icon}</span>
+        <strong>${escapeHtml(data.name)}</strong>
+      </div>
+      <div class="popup-row">${escapeHtml(data.city)}, ${escapeHtml(data.country)}</div>
+      ${desc}${link}${buildBtn}
+    `;
   }
 
   private renderConflictPopup(conflict: ConflictZone): string {
@@ -704,6 +750,9 @@ export class MapPopup {
           <div class="hotspot-gdelt-header">${t('popups.liveIntel')}</div>
           <div class="hotspot-gdelt-loading">${t('popups.loadingNews')}</div>
         </div>
+        ${SITE_VARIANT === 'codexes' ? `
+          <button class="popup-build-book-btn" data-topic="${escapeHtml(hotspot.name)}">📚 Build a Book about ${escapeHtml(hotspot.name)}</button>
+        ` : ''}
       </div>
     `;
   }
