@@ -37,6 +37,8 @@ import {
   OrefSirensPanel,
   TelegramIntelPanel,
 } from '@/components';
+import { BuildBookPanel } from '@/components/BuildBookPanel';
+import { PublicDomainBooksPanel } from '@/components/PublicDomainBooksPanel';
 import { SatelliteFiresPanel } from '@/components/SatelliteFiresPanel';
 import { PositiveNewsFeedPanel } from '@/components/PositiveNewsFeedPanel';
 import { CountersPanel } from '@/components/CountersPanel';
@@ -57,6 +59,8 @@ import {
   STORAGE_KEYS,
   SITE_VARIANT,
 } from '@/config';
+import { isLoggedIn, getCurrentUser, logout } from '@/services/auth';
+import { showAuthModal } from '@/components/AuthModal';
 import { BETA_MODE } from '@/config/beta';
 import { t } from '@/services/i18n';
 import { getCurrentTheme } from '@/utils';
@@ -109,6 +113,22 @@ export class PanelLayoutManager implements AppModule {
 
   renderLayout(): void {
     this.ctx.container.innerHTML = `
+      ${SITE_VARIANT === 'codexes' ? `<div class="xtuff-brand-bar">
+        <a href="https://xtuff.ai" target="_blank" rel="noopener" class="xtuff-logo">xtuff.ai</a>
+        <nav class="xtuff-nav">
+          <a href="http://localhost:8502" target="_blank" rel="noopener">Codexes Factory</a>
+          <a href="http://localhost:8516" target="_blank" rel="noopener">B5K</a>
+          <a href="http://localhost:8503" target="_blank" rel="noopener">Partners</a>
+          <a href="http://localhost:8501" target="_blank" rel="noopener">Social</a>
+        </nav>
+      </div>` : SITE_VARIANT === 'books' ? `<div class="books-brand-bar">
+        <span class="books-brand-title"><span class="books-brand-b5k">Big Five Killer</span> <span class="books-brand-global">Global</span></span>
+        <nav class="books-nav">
+          <a href="https://bigfivekiller.online" target="_blank" rel="noopener">B5K Home</a>
+          <a href="http://localhost:8502" target="_blank" rel="noopener">Codexes Factory</a>
+        </nav>
+        <button class="books-auth-btn" id="booksAuthBtn"></button>
+      </div>` : ''}
       <div class="header">
         <div class="header-left">
           <div class="variant-switcher">${(() => {
@@ -153,9 +173,12 @@ export class PanelLayoutManager implements AppModule {
             </a>` : ''}`;
           })()}</div>
           <span class="logo">MONITOR</span><span class="version">v${__APP_VERSION__}</span>${BETA_MODE ? '<span class="beta-badge">BETA</span>' : ''}
-          <a href="https://x.com/eliehabib" target="_blank" rel="noopener" class="credit-link">
+          <a href="https://x.com/cliehabib" target="_blank" rel="noopener" class="credit-link">
             <svg class="x-logo" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-            <span class="credit-text">@eliehabib</span>
+            <span class="credit-text">H/T @cliehabib</span>
+          </a>
+          <a href="https://x.com/xtuffai" target="_blank" rel="noopener" class="credit-link">
+            <span class="credit-text">Books Dashboard @xtuffai</span>
           </a>
           <a href="https://github.com/koala73/worldmonitor" target="_blank" rel="noopener" class="github-link" title="${t('header.viewOnGitHub')}">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
@@ -195,7 +218,7 @@ export class PanelLayoutManager implements AppModule {
         <div class="map-section" id="mapSection">
           <div class="panel-header">
             <div class="panel-header-left">
-              <span class="panel-title">${SITE_VARIANT === 'tech' ? t('panels.techMap') : SITE_VARIANT === 'happy' ? 'Good News Map' : t('panels.map')}</span>
+              <span class="panel-title">${SITE_VARIANT === 'tech' ? t('panels.techMap') : SITE_VARIANT === 'happy' ? 'Good News Map' : SITE_VARIANT === 'books' ? 'B5K Global Map' : t('panels.map')}</span>
             </div>
             <span class="header-clock" id="headerClock"></span>
             <button class="map-pin-btn" id="mapPinBtn" title="${t('header.pinMap')}">
@@ -213,6 +236,37 @@ export class PanelLayoutManager implements AppModule {
     `;
 
     this.createPanels();
+    this.initBooksAuthButton();
+  }
+
+  private initBooksAuthButton(): void {
+    if (SITE_VARIANT !== 'books') return;
+    const btn = document.getElementById('booksAuthBtn');
+    if (!btn) return;
+
+    const updateLabel = () => {
+      if (isLoggedIn()) {
+        const user = getCurrentUser();
+        btn.textContent = user?.username ?? 'Account';
+        btn.classList.add('logged-in');
+      } else {
+        btn.textContent = 'Login / Register';
+        btn.classList.remove('logged-in');
+      }
+    };
+    updateLabel();
+
+    btn.addEventListener('click', async () => {
+      if (isLoggedIn()) {
+        await logout();
+        updateLabel();
+      } else {
+        await showAuthModal();
+        updateLabel();
+      }
+    });
+
+    window.addEventListener('auth-changed', updateLabel);
   }
 
   renderCriticalBanner(postures: TheaterPostureSummary[]): void {
@@ -595,6 +649,15 @@ export class PanelLayoutManager implements AppModule {
 
     // Global Giving panel (all variants)
     this.ctx.panels['giving'] = new GivingPanel();
+
+    // Books variant panels
+    if (SITE_VARIANT === 'books') {
+      const buildBookPanel = new BuildBookPanel();
+      this.ctx.panels['build-book'] = buildBookPanel;
+
+      const publicDomainPanel = new PublicDomainBooksPanel();
+      this.ctx.panels['public-domain-books'] = publicDomainPanel;
+    }
 
     // Happy variant panels
     if (SITE_VARIANT === 'happy') {

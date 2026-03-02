@@ -14,12 +14,14 @@ export class BuildBookPanel extends Panel {
   private scoreDisplay!: HTMLSpanElement;
   private categoryInput!: HTMLInputElement;
   private countryInput!: HTMLInputElement;
+  private authBar!: HTMLDivElement;
   private currentScore = 0;
 
   constructor() {
     super({ id: 'build-book', title: 'Request A Book Build', className: '' });
     this.render();
     this.listenForPrefill();
+    window.addEventListener('auth-changed', () => this.updateAuthBar());
   }
 
   private createLabel(text: string, className?: string): HTMLLabelElement {
@@ -38,9 +40,56 @@ export class BuildBookPanel extends Panel {
     return input;
   }
 
+  private updateAuthBar(): void {
+    if (!this.authBar) return;
+    this.authBar.textContent = '';
+
+    if (isLoggedIn()) {
+      const user = getCurrentUser();
+      const label = document.createElement('span');
+      label.textContent = 'Signed in as ';
+      const nameSpan = document.createElement('span');
+      nameSpan.className = 'build-book-auth-user';
+      nameSpan.textContent = user?.username ?? '';
+      label.appendChild(nameSpan);
+      this.authBar.appendChild(label);
+
+      const logoutBtn = document.createElement('button');
+      logoutBtn.type = 'button';
+      logoutBtn.className = 'build-book-auth-logout';
+      logoutBtn.textContent = 'Sign out';
+      logoutBtn.addEventListener('click', async () => {
+        const { logout: doLogout } = await import('@/services/auth');
+        await doLogout();
+        this.updateAuthBar();
+      });
+      this.authBar.appendChild(logoutBtn);
+    } else {
+      const label = document.createElement('span');
+      label.textContent = 'Sign in to submit requests';
+      this.authBar.appendChild(label);
+
+      const loginBtn = document.createElement('button');
+      loginBtn.type = 'button';
+      loginBtn.className = 'build-book-auth-login';
+      loginBtn.textContent = 'Login / Register';
+      loginBtn.addEventListener('click', async () => {
+        await showAuthModal();
+        this.updateAuthBar();
+      });
+      this.authBar.appendChild(loginBtn);
+    }
+  }
+
   private render(): void {
     const content = this.content;
     content.textContent = '';
+
+    // Inline auth bar
+    this.authBar = document.createElement('div');
+    this.authBar.className = 'build-book-auth';
+    content.appendChild(this.authBar);
+    this.updateAuthBar();
 
     const form = document.createElement('form');
     form.className = 'build-book-form';

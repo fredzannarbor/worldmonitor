@@ -483,7 +483,44 @@
   font-size: 20px;
   font-weight: 700;
   letter-spacing: 0.5px;
+}
+.books-brand-b5k {
   color: #FF6600;
+}
+.books-brand-global {
+  color: #00d4ff;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-size: 16px;
+}
+.books-auth-btn {
+  margin-left: auto;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 14px;
+  border-radius: 4px;
+  border: 1px solid #FF660088;
+  background: #FF660020;
+  color: #FF6600;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+.books-auth-btn:hover {
+  background: #FF660040;
+  border-color: #FF6600;
+}
+.books-auth-btn.logged-in {
+  border-color: #00d4ff88;
+  background: #00d4ff15;
+  color: #00d4ff;
+}
+.books-auth-btn.logged-in:hover {
+  background: #00d4ff30;
+  border-color: #00d4ff;
 }
 .books-nav {
   display: flex;
@@ -510,8 +547,29 @@
   background: linear-gradient(135deg, #ffffff 0%, #fff5eb 100%);
   border-bottom-color: #CC5200;
 }
-[data-theme="light"] .books-brand-title {
+[data-theme="light"] .books-brand-b5k {
   color: #CC5200;
+}
+[data-theme="light"] .books-brand-global {
+  color: #0088cc;
+}
+[data-theme="light"] .books-auth-btn {
+  border-color: #CC520088;
+  background: #CC520015;
+  color: #CC5200;
+}
+[data-theme="light"] .books-auth-btn:hover {
+  background: #CC520030;
+  border-color: #CC5200;
+}
+[data-theme="light"] .books-auth-btn.logged-in {
+  border-color: #0088cc88;
+  background: #0088cc10;
+  color: #0088cc;
+}
+[data-theme="light"] .books-auth-btn.logged-in:hover {
+  background: #0088cc25;
+  border-color: #0088cc;
 }
 [data-theme="light"] .books-nav a {
   color: #996633;
@@ -520,6 +578,51 @@
   color: #CC5200;
   border-color: #CC520044;
   background: #CC52000d;
+}
+
+/* Build-a-Book panel — span 2 rows so entire form is visible */
+.panel[data-panel="build-book"] {
+  grid-row: span 2;
+}
+
+/* Inline auth status bar at top of form */
+.build-book-auth {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: color-mix(in srgb, var(--accent, #00d4aa) 6%, transparent);
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 11px;
+  color: var(--text-dim);
+}
+.build-book-auth-user {
+  font-weight: 600;
+  color: #00d4ff;
+}
+.build-book-auth-login {
+  font-size: 11px;
+  font-weight: 600;
+  color: #FF6600;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+.build-book-auth-login:hover {
+  color: #FF8533;
+}
+.build-book-auth-logout {
+  font-size: 10px;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+.build-book-auth-logout:hover {
+  color: var(--text-secondary);
 }
 
 /* Build-a-Book form panel */
