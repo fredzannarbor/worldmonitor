@@ -4,8 +4,9 @@ import { escapeHtml } from '@/utils/sanitize';
 import { t } from '../services/i18n';
 import { trackWebcamSelected, trackWebcamRegionFiltered } from '@/services/analytics';
 import { getStreamQuality, subscribeStreamQualityChange } from '@/services/ai-flow-settings';
+import { SITE_VARIANT } from '@/config/variant';
 
-type WebcamRegion = 'iran' | 'middle-east' | 'europe' | 'asia' | 'americas';
+type WebcamRegion = 'middle-east' | 'europe' | 'asia' | 'americas';
 
 interface WebcamFeed {
   id: string;
@@ -19,11 +20,6 @@ interface WebcamFeed {
 // Verified YouTube live stream IDs — validated Feb 2026 via title cross-check.
 // IDs may rotate; update when stale.
 const WEBCAM_FEEDS: WebcamFeed[] = [
-  // Iran Attacks — Tehran, Tel Aviv, Jerusalem
-  { id: 'iran-tehran', city: 'Tehran', country: 'Iran', region: 'iran', channelHandle: '@IranHDCams', fallbackVideoId: '-zGuR1qVKrU' },
-  { id: 'iran-telaviv', city: 'Tel Aviv', country: 'Israel', region: 'iran', channelHandle: '@IsraelLiveCam', fallbackVideoId: '-VLcYT5QBrY' },
-  { id: 'iran-jerusalem', city: 'Jerusalem', country: 'Israel', region: 'iran', channelHandle: '@JerusalemLive', fallbackVideoId: 'JHwwZRH2wz8' },
-  { id: 'iran-multicam', city: 'Middle East', country: 'Multi', region: 'iran', channelHandle: '@MiddleEastCams', fallbackVideoId: '4E-iFtUM2kk' },
   // Middle East — Jerusalem & Tehran adjacent (conflict hotspots)
   { id: 'jerusalem', city: 'Jerusalem', country: 'Israel', region: 'middle-east', channelHandle: '@TheWesternWall', fallbackVideoId: 'UyduhBUpO7Q' },
   { id: 'tehran', city: 'Tehran', country: 'Iran', region: 'middle-east', channelHandle: '@IranHDCams', fallbackVideoId: '-zGuR1qVKrU' },
@@ -48,6 +44,22 @@ const WEBCAM_FEEDS: WebcamFeed[] = [
   { id: 'sydney', city: 'Sydney', country: 'Australia', region: 'asia', channelHandle: '@WebcamSydney', fallbackVideoId: '7pcL-0Wo77U' },
 ];
 
+// Books variant: famous library webcams & virtual tours
+const BOOK_WEBCAM_FEEDS: WebcamFeed[] = [
+  { id: 'loc', city: 'Library of Congress', country: 'USA', region: 'americas', channelHandle: '@LibraryOfCongress', fallbackVideoId: '0B0Qw6uoJFQ' },
+  { id: 'nypl', city: 'New York Public Library', country: 'USA', region: 'americas', channelHandle: '@nyaborgnl', fallbackVideoId: '2BLqhS59Elc' },
+  { id: 'bodleian', city: 'Bodleian Library (Oxford)', country: 'UK', region: 'europe', channelHandle: '@BodleianLibraries', fallbackVideoId: '2XSDhcCXaCU' },
+  { id: 'british-library', city: 'British Library', country: 'UK', region: 'europe', channelHandle: '@britishlibrary', fallbackVideoId: '_1-0d_k7DEI' },
+  { id: 'bnf', city: 'BnF Richelieu (Paris)', country: 'France', region: 'europe', channelHandle: '@laaborgnl', fallbackVideoId: '0cjb0VrjCRA' },
+  { id: 'trinity', city: 'Trinity College Library', country: 'Ireland', region: 'europe', channelHandle: '@taborgnl', fallbackVideoId: '_q_MBsNK380' },
+  { id: 'vatican', city: 'Vatican Library', country: 'Vatican', region: 'europe', channelHandle: '@VaticanNews', fallbackVideoId: '03pYP2Nmreo' },
+  { id: 'strahov', city: 'Strahov Library (Prague)', country: 'Czechia', region: 'europe', channelHandle: '@StrahovLibrary', fallbackVideoId: '_2nxRGTWmDc' },
+  { id: 'diet-library', city: 'National Diet Library', country: 'Japan', region: 'asia', channelHandle: '@NDLJapan', fallbackVideoId: '-C3nQ0ASumA' },
+  { id: 'alexandrina', city: 'Bibliotheca Alexandrina', country: 'Egypt', region: 'middle-east', channelHandle: '@BALibrary', fallbackVideoId: '0WvYGlrVC4k' },
+];
+
+const ACTIVE_WEBCAM_FEEDS = SITE_VARIANT === 'books' ? BOOK_WEBCAM_FEEDS : WEBCAM_FEEDS;
+
 const MAX_GRID_CELLS = 4;
 
 type ViewMode = 'grid' | 'single';
@@ -55,8 +67,8 @@ type RegionFilter = 'all' | WebcamRegion;
 
 export class LiveWebcamsPanel extends Panel {
   private viewMode: ViewMode = 'grid';
-  private regionFilter: RegionFilter = 'iran';
-  private activeFeed: WebcamFeed = WEBCAM_FEEDS[0]!;
+  private regionFilter: RegionFilter = 'all';
+  private activeFeed: WebcamFeed = ACTIVE_WEBCAM_FEEDS[Math.floor(Math.random() * ACTIVE_WEBCAM_FEEDS.length)]!;
   private toolbar: HTMLElement | null = null;
   private iframes: HTMLIFrameElement[] = [];
   private observer: IntersectionObserver | null = null;
@@ -77,16 +89,18 @@ export class LiveWebcamsPanel extends Panel {
   }
 
   private get filteredFeeds(): WebcamFeed[] {
-    if (this.regionFilter === 'all') return WEBCAM_FEEDS;
-    return WEBCAM_FEEDS.filter(f => f.region === this.regionFilter);
+    if (this.regionFilter === 'all') return ACTIVE_WEBCAM_FEEDS;
+    return ACTIVE_WEBCAM_FEEDS.filter(f => f.region === this.regionFilter);
   }
 
-  private static readonly ALL_GRID_IDS = ['jerusalem', 'tehran', 'kyiv', 'washington'];
+  private static readonly ALL_GRID_IDS = SITE_VARIANT === 'books'
+    ? ['loc', 'nypl', 'bodleian', 'british-library']
+    : ['jerusalem', 'kyiv', 'washington', 'tokyo'];
 
   private get gridFeeds(): WebcamFeed[] {
     if (this.regionFilter === 'all') {
       return LiveWebcamsPanel.ALL_GRID_IDS
-        .map(id => WEBCAM_FEEDS.find(f => f.id === id)!)
+        .map(id => ACTIVE_WEBCAM_FEEDS.find(f => f.id === id)!)
         .filter(Boolean);
     }
     return this.filteredFeeds.slice(0, MAX_GRID_CELLS);
@@ -100,7 +114,6 @@ export class LiveWebcamsPanel extends Panel {
     regionGroup.className = 'webcam-toolbar-group';
 
     const regions: { key: RegionFilter; label: string }[] = [
-      { key: 'iran', label: t('components.webcams.regions.iran') },
       { key: 'all', label: t('components.webcams.regions.all') },
       { key: 'middle-east', label: t('components.webcams.regions.mideast') },
       { key: 'europe', label: t('components.webcams.regions.europe') },

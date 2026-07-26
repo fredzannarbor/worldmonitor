@@ -218,6 +218,12 @@ export const DEFAULT_MAP_LAYERS: MapLayers = {
   renewableInstallations: false,
   tradeRoutes: true,
   iranAttacks: false,
+  publisherHQs: false,
+  bookFairs: false,
+  libraries: false,
+  literaryLandmarks: false,
+  literaryToday: false,
+  openLibraryLive: false,
   dayNight: false,
 };
 
@@ -269,6 +275,12 @@ export const MOBILE_DEFAULT_MAP_LAYERS: MapLayers = {
   renewableInstallations: false,
   tradeRoutes: false,
   iranAttacks: false,
+  publisherHQs: false,
+  bookFairs: false,
+  libraries: false,
+  literaryLandmarks: false,
+  literaryToday: false,
+  openLibraryLive: false,
   dayNight: false,
 };
 

@@ -545,6 +545,13 @@ export interface MapLayers {
   iranAttacks: boolean;
   // GPS/GNSS interference layer
   gpsJamming: boolean;
+  // Book variant layers
+  publisherHQs: boolean;
+  bookFairs: boolean;
+  libraries: boolean;
+  literaryLandmarks: boolean;
+  literaryToday: boolean;
+  openLibraryLive: boolean;
   // Overlay layers
   dayNight: boolean;
 }

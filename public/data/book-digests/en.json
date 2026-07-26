@@ -1,0 +1,218 @@
+{
+  "generated": "2026-03-02T12:00:00Z",
+  "language": "en",
+  "currentDate": "2026-03-02",
+  "categories": {
+    "publishing-news": {
+      "title": "Publishing News",
+      "articles": [
+        {
+          "date": "2026-03-02",
+          "title": "Spring 2026 Writers to Watch",
+          "summary": "Publishers Weekly spotlights 15 emerging authors across literary and children's fiction for spring 2026, praising their 'originality and audacity' with protagonists who reclaim agency over their own narratives.",
+          "keyFacts": [
+            "10 literary fiction and 5 children's fiction debut authors selected",
+            "Published January 2, 2026 by Matt Seidel and Joanne O'Sullivan"
+          ],
+          "comment": "PW's writers-to-watch list remains the best leading indicator of who'll still have a career in five years.",
+          "citation": "Publishers Weekly",
+          "link": "https://www.publishersweekly.com/pw/by-topic/industry-news/publisher-news/article/99361-spring-2026-writers-to-watch.html"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "Around the Book World: Spotify Audiobooks Expand, South Korea Rejects AI Publisher Deposits",
+          "summary": "Carlo Carrenho's global roundup covers Spotify's audiobook launch in Sweden reaching a million new households, and South Korea's National Library rejecting deposits from an AI publisher producing thousands of titles annually.",
+          "keyFacts": [
+            "Spotify's Swedish audiobook launch expanded market penetration by 80%",
+            "South Korea's National Library rejected mass AI-generated book deposits, raising legal deposit questions"
+          ],
+          "comment": "When national libraries start refusing your books, maybe your AI needs a better editor.",
+          "citation": "Publishing Perspectives",
+          "link": "https://publishingperspectives.com/2026/02/around-the-book-world-monday-february-23-2026/"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "UK Printed Book Sector Worth £1.8bn in 2025, Volume Down 2.5%",
+          "summary": "NielsenIQ BookScan data shows 191 million printed books sold in the UK in 2025, with value down 0.5% and volume down 2.5%. Audio growth likely offset the dip for publishers.",
+          "keyFacts": [
+            "UK print sector at £1.8bn with 191 million units sold, both metrics declining",
+            "Continuing rise in audiobook business expected to compensate for print softness"
+          ],
+          "comment": "Print isn't dying, it's just being quietly subsidized by people who'd rather listen.",
+          "citation": "The Bookseller",
+          "link": "https://www.thebookseller.com/news/predictions-what-lies-ahead-for-the-book-trade-in-2026"
+        }
+      ]
+    },
+    "book-reviews": {
+      "title": "Book Reviews",
+      "articles": [
+        {
+          "date": "2026-03-02",
+          "title": "5 Book Reviews You Need to Read This Week",
+          "summary": "Lit Hub rounds up the week's essential reviews: Lauren Groff's Brawler, Gavin Newsom's memoir, Danny Funt on sports gambling, Peter Gordon's Walter Benjamin biography, and Mario Vargas Llosa's final novel.",
+          "keyFacts": [
+            "Lauren Groff's Brawler: Stories reviewed by Alexandra Jacobs in the NYT",
+            "Mario Vargas Llosa's I Give You My Silence hailed as a tender final novel"
+          ],
+          "comment": "When your weekly must-reads span a California governor and a Peruvian Nobel laureate, the range of literary journalism is alive and well.",
+          "citation": "Literary Hub",
+          "link": "https://lithub.com/5-book-reviews-you-need-to-read-this-week-2-26-2026/"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "The Most Anticipated Fiction of Spring 2026",
+          "summary": "Kirkus Reviews curates 15 must-read novels for spring, including Allegra Goodman's This Is Not About Us, Tayari Jones's Kin, and Yann Martel's Son of Nobody, calling it a season of 'remarkable debuts and triumphant returns.'",
+          "keyFacts": [
+            "Tayari Jones's Kin called 'beautifully written and powerfully compelling'",
+            "Karan Mahajan's The Complex compared to Tolstoy and Dostoevsky by Kirkus"
+          ],
+          "comment": "Comparing a debut to Tolstoy AND Dostoevsky in one review is either visionary criticism or reckless hyperbole. No middle ground.",
+          "citation": "Kirkus Reviews",
+          "link": "https://www.kirkusreviews.com/book-lists/most-anticipated-fiction-spring-2026/"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "Best Reviewed Books of the Week: Goodman, Holmes, and Helle",
+          "summary": "Lit Hub collects the week's starred reviews, highlighting Allegra Goodman's multigenerational family saga, Richard Holmes's maritime history The Boundless Deep, and Danish author Helle Helle's latest.",
+          "keyFacts": [
+            "Allegra Goodman's This Is Not About Us traces the Rubenstein family across decades",
+            "Richard Holmes's The Boundless Deep praised for its narrative nonfiction approach"
+          ],
+          "comment": "A multigenerational saga, a maritime adventure, and Scandinavian minimalism walk into a review column. Sounds about right for February.",
+          "citation": "Literary Hub",
+          "link": "https://lithub.com/what-should-you-read-next-here-are-the-best-reviewed-books-of-the-week-2-13-2026/"
+        }
+      ]
+    },
+    "literary-awards": {
+      "title": "Literary Awards",
+      "articles": [
+        {
+          "date": "2026-03-02",
+          "title": "International Booker Prize 2026 Longlist Announced: 13 Books from 11 Languages",
+          "summary": "The International Booker Prize longlist features 13 translated works from German, French, Spanish, Swedish, Danish, Portuguese, Italian, Bulgarian, Persian, Dutch, and Mandarin Chinese. Shortlist due March 31.",
+          "keyFacts": [
+            "13 books from 11 languages selected from 128 submissions by publishers",
+            "Longlisted authors include Daniel Kehlmann, Marie NDiaye, Olga Ravn, and Shahrnush Parsipur"
+          ],
+          "comment": "Eleven languages on one longlist. The International Booker remains the most cosmopolitan prize in Anglophone publishing.",
+          "citation": "Literary Hub",
+          "link": "https://lithub.com/heres-the-longlist-for-the-2026-international-booker-prize/"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "2026 Carnegie Medals: Megha Majumdar and Yiyun Li Win for Fiction and Nonfiction",
+          "summary": "The ALA's Andrew Carnegie Medals honor Majumdar's A Guardian and a Thief, set in climate-threatened Kolkata, and Yiyun Li's devastating memoir Things in Nature Merely Grow about losing both sons to suicide.",
+          "keyFacts": [
+            "Fiction winner A Guardian and a Thief explores desperation in a climate-threatened Kolkata",
+            "Nonfiction winner Things in Nature Merely Grow confronts the death of both of Li's sons"
+          ],
+          "comment": "Li's memoir is the kind of book you hope never needs to be written. That it exists is both a tragedy and a literary achievement.",
+          "citation": "American Library Association",
+          "link": "https://www.ala.org/carnegie-medals/2026-winners"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "2026 PEN America Literary Awards Finalists Announced",
+          "summary": "PEN America reveals finalists across its literary award categories, with the ceremony scheduled for March 31, 2026 at the Town Hall in New York City.",
+          "keyFacts": [
+            "Finalists announced across fiction, nonfiction, poetry, and translation categories",
+            "Awards ceremony set for March 31, 2026 at Town Hall, New York City"
+          ],
+          "comment": "PEN's awards remain one of the few places where translators get the same stage as novelists.",
+          "citation": "PEN America",
+          "link": "https://pen.org/2026-pen-america-literary-awards-finalists/"
+        }
+      ]
+    },
+    "author-spotlights": {
+      "title": "Author Spotlights",
+      "articles": [
+        {
+          "date": "2026-03-02",
+          "title": "Tayari Jones on Kin: 'I Wrote to Comfort Myself'",
+          "summary": "In a Fresh Air interview, Tayari Jones discusses her new novel Kin, set in 1950s Louisiana and Atlanta. She reveals it took seven years to write, and Oprah has called it the novel of 2026.",
+          "keyFacts": [
+            "Kin follows two motherless women who grow up as neighbors in 1950s Louisiana and Atlanta",
+            "Jones credits sneaking into Pearl Cleage's writing class at Spelman College with launching her career"
+          ],
+          "comment": "Seven years and a forged adviser's signature to get into a writing class. Every literary career has an origin story worth telling.",
+          "citation": "NPR Fresh Air",
+          "link": "https://www.npr.org/2026/02/24/nx-s1-5723959/tayari-jones-kin"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "Book Riot's Most Anticipated Books of 2026",
+          "summary": "Book Riot curates buzzy releases from beloved authors and exciting debuts spanning fantasy, romance, nonfiction, and YA, including Lauren Groff, Rainbow Rowell, Percival Everett, and Aiden Thomas.",
+          "keyFacts": [
+            "Featured authors include Lauren Groff (Brawler), Rainbow Rowell (Cherry Baby), and Percival Everett",
+            "List spans fantasy, romance, historical fiction, nonfiction, and young adult genres"
+          ],
+          "comment": "When Rainbow Rowell and Percival Everett land on the same anticipation list, the genre-literary divide is officially dead.",
+          "citation": "Book Riot",
+          "link": "https://bookriot.com/most-anticipated-books-of-2026/"
+        }
+      ]
+    },
+    "industry-analysis": {
+      "title": "Industry Analysis",
+      "articles": [
+        {
+          "date": "2026-03-02",
+          "title": "Predictions: What Lies Ahead for the Book Trade in 2026?",
+          "summary": "The Bookseller surveys industry leaders on 2026's defining trends: the National Year of Reading, AI's evolving role, audiobook maturation, and continued demand for romantasy and escapist fiction.",
+          "keyFacts": [
+            "National Year of Reading, AI, and audio identified as the three dominant 2026 themes",
+            "Romantasy, escapism, and film adaptations expected to drive consumer demand"
+          ],
+          "comment": "Romantasy and AI in the same trend forecast -- publishing in 2026 is nothing if not eclectic.",
+          "citation": "The Bookseller",
+          "link": "https://www.thebookseller.com/news/predictions-what-lies-ahead-for-the-book-trade-in-2026"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "Don't Invest in AI, Invest in the Future of the Book",
+          "summary": "Lucy Mercer argues in The Bookseller that the publishing industry should prioritize supporting small presses over investing in AI and large language models, calling independent publishers the real engine of literary innovation.",
+          "keyFacts": [
+            "Op-ed argues resources should flow to independent publishers, not AI tools",
+            "Small presses characterized as the true engine of literary innovation and risk-taking"
+          ],
+          "comment": "The small press argument is compelling until you remember most of them can't afford health insurance for their editors.",
+          "citation": "The Bookseller",
+          "link": "https://www.thebookseller.com/comment/dont-invest-in-ai-invest-in-the-future-of-the-book"
+        }
+      ]
+    },
+    "global-literacy": {
+      "title": "Global Literacy",
+      "articles": [
+        {
+          "date": "2026-03-02",
+          "title": "UNESCO Launches Digital Skills Course for Literacy Educators in Arabic, French, and Spanish",
+          "summary": "The UNESCO Institute for Lifelong Learning, with Huawei support, launched an 11-session self-paced course on February 18, 2026 to boost digital competencies of youth and adult literacy educators worldwide.",
+          "keyFacts": [
+            "Course available in four languages: English, Arabic, French, and Spanish",
+            "11 sessions cover integrating AI and digital tools into literacy instruction"
+          ],
+          "comment": "Teaching the teachers to use digital tools for literacy -- unglamorous work that actually moves the needle.",
+          "citation": "UNESCO Institute for Lifelong Learning",
+          "link": "https://www.uil.unesco.org/en/articles/new-digital-skills-course-literacy-educators-arabic-french-and-spanish"
+        },
+        {
+          "date": "2026-03-01",
+          "title": "United Nations General Assembly Advances the Global Literacy Agenda",
+          "summary": "The UN General Assembly adopted the resolution 'Literacy for Life: Shaping Future Agenda' with 125 Member State co-sponsors, calling on UNESCO to coordinate global efforts through the Global Alliance for Literacy.",
+          "keyFacts": [
+            "Resolution adopted with 125 Member States as co-sponsors, led by Mongolia",
+            "739 million adults worldwide still cannot read and write; global rate at 87%"
+          ],
+          "comment": "125 co-sponsors and 739 million illiterate adults. Resolutions are easy; the hard part is the reading lessons.",
+          "citation": "UNESCO",
+          "link": "https://www.unesco.org/en/articles/united-nations-general-assembly-advances-global-literacy-agenda"
+        }
+      ]
+    }
+  },
+  "archive": {}
+}

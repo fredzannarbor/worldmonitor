@@ -128,6 +128,12 @@ const layers = {
   renewableInstallations: false,
   tradeRoutes: false,
   iranAttacks: false,
+  publisherHQs: false,
+  bookFairs: false,
+  libraries: false,
+  literaryLandmarks: false,
+  literaryToday: false,
+  openLibraryLive: false,
   dayNight: false,
 };
 

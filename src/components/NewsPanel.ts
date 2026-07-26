@@ -8,9 +8,21 @@ import { analysisWorker, enrichWithVelocityML, getClusterAssetContext, MAX_DISTA
 import { getSourcePropagandaRisk, getSourceTier, getSourceType } from '@/config/feeds';
 import { SITE_VARIANT } from '@/config';
 import { t, getCurrentLanguage } from '@/services/i18n';
+import { scoreBookWorthiness } from '@/services/book-worthiness';
+import { buildBookUrl } from '@/services/build-book-url';
 
 /** Threshold for enabling virtual scrolling */
 const VIRTUAL_SCROLL_THRESHOLD = 15;
+
+export interface DigestArticle {
+  date: string;
+  title: string;
+  summary: string;
+  keyFacts: string[];
+  comment: string;
+  citation: string;
+  link: string;
+}
 
 /** Summary cache TTL in milliseconds (10 minutes) */
 const SUMMARY_CACHE_TTL = 10 * 60 * 1000;
@@ -36,6 +48,10 @@ export class NewsPanel extends Panel {
   private renderRequestId = 0;
   private boundScrollHandler: (() => void) | null = null;
   private boundClickHandler: (() => void) | null = null;
+
+  // Digest pagination
+  private digestDateIndex = 0;
+  private digestArticles: DigestArticle[] = [];
 
   // Panel summary feature
   private summaryBtn: HTMLButtonElement | null = null;
@@ -529,6 +545,23 @@ export class NewsPanel extends Panel {
       ? `<span class="category-tag" style="color:${catColor};border-color:${catColor}40;background:${catColor}20">${catLabel}</span>`
       : '';
 
+    // Book-worthiness button (codexes variant only, score >= 60)
+    let buildBookBtn = '';
+    if (SITE_VARIANT === 'codexes') {
+      const worthiness = scoreBookWorthiness(cluster);
+      if (worthiness.score >= 60) {
+        const codexType = worthiness.recommendedFlavors[0] || 'lite-briefing';
+        const url = buildBookUrl({
+          topic: cluster.primaryTitle,
+          codexType,
+          score: worthiness.score,
+          sources: cluster.sourceCount,
+          category: cat,
+        });
+        buildBookBtn = `<button class="build-book-btn" data-url="${escapeHtml(url)}" title="Build a Book — ${escapeHtml(codexType)} (score ${worthiness.score})">📚 Build</button>`;
+      }
+    }
+
     // Build class list for item
     const itemClasses = [
       'item',
@@ -551,6 +584,7 @@ export class NewsPanel extends Panel {
           ${sentimentBadge}
           ${cluster.isAlert ? '<span class="alert-tag">ALERT</span>' : ''}
           ${categoryBadge}
+          ${buildBookBtn}
         </div>
         <a class="item-title" href="${sanitizeUrl(cluster.primaryLink)}" target="_blank" rel="noopener">${escapeHtml(cluster.primaryTitle)}</a>
         <div class="cluster-meta">
@@ -605,6 +639,17 @@ export class NewsPanel extends Panel {
         if (text) this.handleTranslate(btn, text);
       });
     });
+
+    // Build-a-book buttons (codexes variant)
+    const bookBtns = this.content.querySelectorAll<HTMLButtonElement>('.build-book-btn');
+    bookBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        const url = btn.dataset.url;
+        if (url) window.open(url, '_blank', 'noopener');
+      });
+    });
   }
 
   private getLocalizedAssetLabel(type: RelatedAsset['type']): string {
@@ -616,6 +661,135 @@ export class NewsPanel extends Panel {
       nuclear: 'modals.countryBrief.infra.nuclear',
     };
     return t(keyMap[type]);
+  }
+
+  /**
+   * Render digest articles with date-based pagination.
+   */
+  public renderDigestArticles(articles: DigestArticle[], _category: string): void {
+    this.digestArticles = articles;
+    this.digestDateIndex = 0;
+    this.setDataBadge('live');
+
+    if (articles.length === 0) {
+      this.setCount(0);
+      this.showError('No digest articles available');
+      return;
+    }
+
+    this.setCount(articles.length);
+    this.renderCurrentDigestPage();
+  }
+
+  private renderCurrentDigestPage(): void {
+    // Group articles by date
+    const byDate = new Map<string, DigestArticle[]>();
+    for (const a of this.digestArticles) {
+      const list = byDate.get(a.date) || [];
+      list.push(a);
+      byDate.set(a.date, list);
+    }
+
+    // Sort dates descending (most recent first)
+    const dates = [...byDate.keys()].sort((a, b) => b.localeCompare(a));
+    if (dates.length === 0) return;
+
+    // Clamp index
+    if (this.digestDateIndex < 0) this.digestDateIndex = 0;
+    if (this.digestDateIndex >= dates.length) this.digestDateIndex = dates.length - 1;
+
+    const currentDate = dates[this.digestDateIndex]!;
+    const articles = byDate.get(currentDate) ?? [];
+
+    const articlesHtml = articles.map((a, idx) => {
+      const factsHtml = a.keyFacts.length > 0
+        ? `<ul class="digest-article-facts">${a.keyFacts.map(f => `<li>${escapeHtml(f)}</li>`).join('')}</ul>`
+        : '';
+
+      // Shortened URI: domain + truncated path
+      let shortUri = '';
+      if (a.link) {
+        try {
+          const u = new URL(a.link);
+          const host = u.hostname.replace(/^www\./, '');
+          const path = u.pathname.length > 30
+            ? u.pathname.slice(0, 28) + '...'
+            : u.pathname;
+          shortUri = host + (path !== '/' ? path : '');
+        } catch { /* skip malformed */ }
+      }
+
+      const citationLine = [
+        a.citation ? escapeHtml(a.citation) : '',
+        shortUri ? `<span class="digest-article-uri">${escapeHtml(shortUri)}</span>` : '',
+      ].filter(Boolean).join(' · ');
+
+      return `
+        <div class="digest-article" data-digest-idx="${idx}">
+          <div class="digest-article-header">
+            <div class="digest-article-title">${escapeHtml(a.title)}</div>
+            <button class="digest-copy-btn" data-digest-idx="${idx}" title="Copy article">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
+          </div>
+          <div class="digest-article-summary">${escapeHtml(a.summary)}</div>
+          ${factsHtml}
+          ${a.comment ? `<div class="digest-article-comment">${escapeHtml(a.comment)}</div>` : ''}
+          ${citationLine ? `<div class="digest-article-citation">${citationLine}</div>` : ''}
+        </div>
+      `;
+    }).join('');
+
+    // Pagination controls (only if multiple dates)
+    let paginationHtml = '';
+    if (dates.length > 1) {
+      paginationHtml = `
+        <div class="digest-pagination">
+          <button class="digest-page-btn digest-prev" ${this.digestDateIndex >= dates.length - 1 ? 'disabled' : ''}>&lt;</button>
+          <span class="digest-page-date">${escapeHtml(currentDate)}</span>
+          <button class="digest-page-btn digest-next" ${this.digestDateIndex <= 0 ? 'disabled' : ''}>&gt;</button>
+        </div>
+      `;
+    }
+
+    this.setContent(articlesHtml + paginationHtml);
+
+    // Bind pagination click handlers
+    const prevBtn = this.content.querySelector('.digest-prev');
+    const nextBtn = this.content.querySelector('.digest-next');
+    prevBtn?.addEventListener('click', () => {
+      this.digestDateIndex++;
+      this.renderCurrentDigestPage();
+    });
+    nextBtn?.addEventListener('click', () => {
+      this.digestDateIndex--;
+      this.renderCurrentDigestPage();
+    });
+
+    // Bind copy button handlers
+    this.content.querySelectorAll('.digest-copy-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt((btn as HTMLElement).dataset.digestIdx ?? '0', 10);
+        const article = articles[idx];
+        if (!article) return;
+        const text = [
+          article.title,
+          article.summary,
+          ...article.keyFacts.map(f => `- ${f}`),
+          article.comment ? `"${article.comment}"` : '',
+          article.citation ? `Source: ${article.citation}` : '',
+          article.link || '',
+        ].filter(Boolean).join('\n');
+        navigator.clipboard.writeText(text).then(() => {
+          const svg = btn.querySelector('svg');
+          if (svg) {
+            const orig = svg.style.color;
+            svg.style.color = 'var(--accent, #00d4aa)';
+            setTimeout(() => { svg.style.color = orig; }, 800);
+          }
+        });
+      });
+    });
   }
 
   /**

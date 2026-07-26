@@ -1,6 +1,7 @@
 import type { PanelConfig, MapLayers } from '@/types';
 import type { DataSourceId } from '@/services/data-freshness';
 import { SITE_VARIANT } from './variant';
+import { BOOKS_PANELS, BOOKS_MAP_LAYERS, BOOKS_MOBILE_MAP_LAYERS } from './variants/books';
 
 // ============================================
 // FULL VARIANT (Geopolitical)
@@ -103,6 +104,13 @@ const FULL_MAP_LAYERS: MapLayers = {
   speciesRecovery: false,
   renewableInstallations: false,
   tradeRoutes: false,
+  // Book variant layers
+  publisherHQs: false,
+  bookFairs: false,
+  libraries: false,
+  literaryLandmarks: false,
+  literaryToday: false,
+  openLibraryLive: false,
   dayNight: false,
 };
 
@@ -154,6 +162,12 @@ const FULL_MOBILE_MAP_LAYERS: MapLayers = {
   speciesRecovery: false,
   renewableInstallations: false,
   tradeRoutes: false,
+  publisherHQs: false,
+  bookFairs: false,
+  libraries: false,
+  literaryLandmarks: false,
+  literaryToday: false,
+  openLibraryLive: false,
   dayNight: false,
 };
 
@@ -245,6 +259,12 @@ const TECH_MAP_LAYERS: MapLayers = {
   renewableInstallations: false,
   tradeRoutes: false,
   iranAttacks: false,
+  publisherHQs: false,
+  bookFairs: false,
+  libraries: false,
+  literaryLandmarks: false,
+  literaryToday: false,
+  openLibraryLive: false,
   dayNight: false,
 };
 
@@ -296,6 +316,12 @@ const TECH_MOBILE_MAP_LAYERS: MapLayers = {
   renewableInstallations: false,
   tradeRoutes: false,
   iranAttacks: false,
+  publisherHQs: false,
+  bookFairs: false,
+  libraries: false,
+  literaryLandmarks: false,
+  literaryToday: false,
+  openLibraryLive: false,
   dayNight: false,
 };
 
@@ -384,6 +410,12 @@ const FINANCE_MAP_LAYERS: MapLayers = {
   renewableInstallations: false,
   tradeRoutes: true,
   iranAttacks: false,
+  publisherHQs: false,
+  bookFairs: false,
+  libraries: false,
+  literaryLandmarks: false,
+  literaryToday: false,
+  openLibraryLive: false,
   dayNight: false,
 };
 
@@ -435,6 +467,12 @@ const FINANCE_MOBILE_MAP_LAYERS: MapLayers = {
   renewableInstallations: false,
   tradeRoutes: false,
   iranAttacks: false,
+  publisherHQs: false,
+  bookFairs: false,
+  libraries: false,
+  literaryLandmarks: false,
+  literaryToday: false,
+  openLibraryLive: false,
   dayNight: false,
 };
 
@@ -502,6 +540,12 @@ const HAPPY_MAP_LAYERS: MapLayers = {
   renewableInstallations: true,
   tradeRoutes: false,
   iranAttacks: false,
+  publisherHQs: false,
+  bookFairs: false,
+  libraries: false,
+  literaryLandmarks: false,
+  literaryToday: false,
+  openLibraryLive: false,
   dayNight: false,
 };
 
@@ -553,6 +597,12 @@ const HAPPY_MOBILE_MAP_LAYERS: MapLayers = {
   renewableInstallations: true,
   tradeRoutes: false,
   iranAttacks: false,
+  publisherHQs: false,
+  bookFairs: false,
+  libraries: false,
+  literaryLandmarks: false,
+  literaryToday: false,
+  openLibraryLive: false,
   dayNight: false,
 };
 
@@ -560,9 +610,9 @@ const HAPPY_MOBILE_MAP_LAYERS: MapLayers = {
 // VARIANT-AWARE EXPORTS
 // ============================================
 // codexes variant uses the same panels/layers as full (it's an embed wrapper)
-export const DEFAULT_PANELS = SITE_VARIANT === 'happy' ? HAPPY_PANELS : SITE_VARIANT === 'tech' ? TECH_PANELS : SITE_VARIANT === 'finance' ? FINANCE_PANELS : FULL_PANELS;
-export const DEFAULT_MAP_LAYERS = SITE_VARIANT === 'happy' ? HAPPY_MAP_LAYERS : SITE_VARIANT === 'tech' ? TECH_MAP_LAYERS : SITE_VARIANT === 'finance' ? FINANCE_MAP_LAYERS : FULL_MAP_LAYERS;
-export const MOBILE_DEFAULT_MAP_LAYERS = SITE_VARIANT === 'happy' ? HAPPY_MOBILE_MAP_LAYERS : SITE_VARIANT === 'tech' ? TECH_MOBILE_MAP_LAYERS : SITE_VARIANT === 'finance' ? FINANCE_MOBILE_MAP_LAYERS : FULL_MOBILE_MAP_LAYERS;
+export const DEFAULT_PANELS = SITE_VARIANT === 'books' ? BOOKS_PANELS : SITE_VARIANT === 'happy' ? HAPPY_PANELS : SITE_VARIANT === 'tech' ? TECH_PANELS : SITE_VARIANT === 'finance' ? FINANCE_PANELS : FULL_PANELS;
+export const DEFAULT_MAP_LAYERS = SITE_VARIANT === 'books' ? BOOKS_MAP_LAYERS : SITE_VARIANT === 'happy' ? HAPPY_MAP_LAYERS : SITE_VARIANT === 'tech' ? TECH_MAP_LAYERS : SITE_VARIANT === 'finance' ? FINANCE_MAP_LAYERS : FULL_MAP_LAYERS;
+export const MOBILE_DEFAULT_MAP_LAYERS = SITE_VARIANT === 'books' ? BOOKS_MOBILE_MAP_LAYERS : SITE_VARIANT === 'happy' ? HAPPY_MOBILE_MAP_LAYERS : SITE_VARIANT === 'tech' ? TECH_MOBILE_MAP_LAYERS : SITE_VARIANT === 'finance' ? FINANCE_MOBILE_MAP_LAYERS : FULL_MOBILE_MAP_LAYERS;
 
 /** Maps map-layer toggle keys to their data-freshness source IDs (single source of truth). */
 export const LAYER_TO_SOURCE: Partial<Record<keyof MapLayers, DataSourceId[]>> = {
@@ -676,6 +726,18 @@ export const PANEL_CATEGORY_MAP: Record<string, { labelKey: string; panelKeys: s
     labelKey: 'header.panelCatGulfMena',
     panelKeys: ['gcc-investments', 'gccNews', 'monitors'],
     variants: ['finance'],
+  },
+
+  // Books variant
+  booksCore: {
+    labelKey: 'header.panelCatBooksCore',
+    panelKeys: ['map', 'build-book', 'live-news', 'live-webcams', 'insights'],
+    variants: ['books'],
+  },
+  booksFeeds: {
+    labelKey: 'header.panelCatBooksFeeds',
+    panelKeys: ['publishing-news', 'book-reviews', 'literary-awards', 'industry-analysis', 'global-literacy', 'author-spotlights', 'monitors'],
+    variants: ['books'],
   },
 };
 

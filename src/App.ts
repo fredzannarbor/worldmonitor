@@ -40,8 +40,8 @@ import { EventHandlerManager } from '@/app/event-handlers';
 import { resolveUserRegion } from '@/utils/user-location';
 import { embedBridge } from '@/services/embed-bridge';
 import { RecencyFilter } from '@/components/RecencyFilter';
-import { rankBookWorthyEvents, type BookWorthinessContext } from '@/services/book-worthiness';
-import { parseRecencyParam, filterByRecency } from '@/utils/recency';
+import { rankBookWorthyEvents } from '@/services/book-worthiness';
+
 
 const CYBER_LAYER_ENABLED = import.meta.env.VITE_ENABLE_CYBER_LAYER === 'true';
 
@@ -376,7 +376,7 @@ export class App {
 
     // Phase 2b: RecencyFilter + embed bridge (codexes variant or when embedded)
     this.recencyFilter = new RecencyFilter();
-    const headerBar = el.querySelector('.header-bar') || el;
+    const headerBar = this.state.container.querySelector('.header-bar') || this.state.container;
     this.recencyFilter.mount(headerBar as HTMLElement);
     this.recencyFilter.onRangeChange((_range) => {
       // Re-filter news panels on recency change
@@ -426,6 +426,12 @@ export class App {
     this.dataLoader.syncDataFreshnessWithLayers();
     await preloadCountryGeometry();
     await this.dataLoader.loadAllData();
+
+    // Codexes variant: compute book-worthiness and send to embed bridge
+    if (SITE_VARIANT === 'codexes' && this.state.latestClusters.length > 0) {
+      const bookWorthy = rankBookWorthyEvents(this.state.latestClusters);
+      embedBridge.sendBookWorthyEvents(bookWorthy);
+    }
 
     startLearning();
 

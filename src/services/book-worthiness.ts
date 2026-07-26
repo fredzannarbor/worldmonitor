@@ -143,7 +143,7 @@ function scoreSignalConvergence(
 }
 
 function scoreCiiSpike(
-  event: ClusteredEvent,
+  _event: ClusteredEvent,
   countryScores: CountryScore[],
 ): number {
   // Match event to a country via its allItems lat/lon or title keywords

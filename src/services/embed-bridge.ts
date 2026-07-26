@@ -117,9 +117,9 @@ class EmbedBridge {
 
   /** Initialise the bridge. Only activates when running inside an iframe. */
   init(callbacks: EmbedBridgeCallbacks = {}): void {
-    // Only activate in codexes variant or when explicitly embedded
+    // Only activate in codexes/books variant or when explicitly embedded
     const isEmbedded = window !== window.parent;
-    if (!isEmbedded && SITE_VARIANT !== 'codexes') return;
+    if (!isEmbedded && SITE_VARIANT !== 'codexes' && SITE_VARIANT !== 'books') return;
 
     this.callbacks = callbacks;
     this.active = true;

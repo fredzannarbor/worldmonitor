@@ -4,7 +4,24 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 // English is always needed as fallback — bundle it eagerly.
 import enTranslation from '../locales/en.json';
 
-const SUPPORTED_LANGUAGES = ['en', 'fr', 'de', 'el', 'es', 'it', 'pl', 'pt', 'nl', 'sv', 'ru', 'ar', 'zh', 'ja', 'ko', 'tr', 'th', 'vi'] as const;
+const SUPPORTED_LANGUAGES = [
+  // Original 18
+  'en', 'fr', 'de', 'el', 'es', 'it', 'pl', 'pt', 'nl', 'sv', 'ru', 'ar', 'zh', 'ja', 'ko', 'tr', 'th', 'vi',
+  // South/Southeast Asia
+  'hi', 'bn', 'ta', 'te', 'ml', 'mr', 'gu', 'kn', 'pa', 'ur', 'my', 'km', 'lo', 'ms', 'id', 'tl', 'si', 'ne',
+  // East Asia
+  'zh-TW',
+  // Central Asia / Caucasus
+  'ka', 'hy', 'az', 'kk', 'uz', 'ky', 'tg', 'mn',
+  // Middle East / North Africa
+  'fa', 'he', 'ku', 'ps',
+  // Sub-Saharan Africa
+  'sw', 'am', 'ha', 'yo', 'ig', 'zu', 'xh', 'af', 'so', 'rw', 'sn', 'ny',
+  // European
+  'uk', 'bg', 'hr', 'sr', 'sk', 'cs', 'hu', 'ro', 'lt', 'lv', 'et', 'fi', 'da', 'no', 'is', 'ga', 'cy', 'mt', 'sq', 'mk', 'bs', 'be', 'ca', 'gl', 'eu', 'lb',
+  // Pacific
+  'mi', 'sm', 'to', 'fj',
+] as const;
 type SupportedLanguage = typeof SUPPORTED_LANGUAGES[number];
 type TranslationDictionary = Record<string, unknown>;
 
@@ -17,10 +34,21 @@ const localeModules = import.meta.glob<TranslationDictionary>(
   { import: 'default' },
 );
 
-const RTL_LANGUAGES = new Set(['ar']);
+const RTL_LANGUAGES = new Set(['ar', 'fa', 'he', 'ur', 'ps', 'ku']);
 
 function normalizeLanguage(lng: string): SupportedLanguage {
-  const base = (lng || 'en').split('-')[0]?.toLowerCase() || 'en';
+  const raw = (lng || 'en').toLowerCase();
+  // Check full tag first (e.g., zh-TW, zh-tw)
+  if (SUPPORTED_LANGUAGE_SET.has(raw as SupportedLanguage)) {
+    return raw as SupportedLanguage;
+  }
+  // Normalize zh-Hant / zh-TW variants
+  if (raw.startsWith('zh-') && raw !== 'zh-cn') {
+    if (SUPPORTED_LANGUAGE_SET.has('zh-TW' as SupportedLanguage)) {
+      return 'zh-TW' as SupportedLanguage;
+    }
+  }
+  const base = raw.split('-')[0] || 'en';
   if (SUPPORTED_LANGUAGE_SET.has(base as SupportedLanguage)) {
     return base as SupportedLanguage;
   }
@@ -47,7 +75,8 @@ async function ensureLanguageLoaded(lng: string): Promise<SupportedLanguage> {
   if (normalized === 'en') {
     translation = enTranslation as TranslationDictionary;
   } else {
-    const loader = localeModules[`../locales/${normalized}.json`];
+    // Try exact match first, then lowercase variant for case-insensitive filesystems
+    const loader = localeModules[`../locales/${normalized}.json`] ?? localeModules[`../locales/${normalized.toLowerCase()}.json`];
     if (!loader) {
       console.warn(`No locale file for "${normalized}", falling back to English`);
       translation = enTranslation as TranslationDictionary;
@@ -125,14 +154,22 @@ export function isRTL(): boolean {
 
 export function getLocale(): string {
   const lang = getCurrentLanguage();
-  const map: Record<string, string> = { en: 'en-US', el: 'el-GR', zh: 'zh-CN', pt: 'pt-BR', ja: 'ja-JP', ko: 'ko-KR', tr: 'tr-TR', th: 'th-TH', vi: 'vi-VN' };
+  const map: Record<string, string> = {
+    en: 'en-US', el: 'el-GR', zh: 'zh-CN', 'zh-TW': 'zh-TW', pt: 'pt-BR',
+    ja: 'ja-JP', ko: 'ko-KR', tr: 'tr-TR', th: 'th-TH', vi: 'vi-VN',
+    hi: 'hi-IN', bn: 'bn-BD', ta: 'ta-IN', te: 'te-IN', ml: 'ml-IN',
+    mr: 'mr-IN', gu: 'gu-IN', kn: 'kn-IN', pa: 'pa-IN', ur: 'ur-PK',
+    fa: 'fa-IR', he: 'he-IL', sw: 'sw-TZ', am: 'am-ET',
+  };
   return map[lang] || lang;
 }
 
 export const LANGUAGES = [
+  // Original 18
   { code: 'en', label: 'English', flag: '🇬🇧' },
   { code: 'ar', label: 'العربية', flag: '🇸🇦' },
-  { code: 'zh', label: '中文', flag: '🇨🇳' },
+  { code: 'zh', label: '中文 (简体)', flag: '🇨🇳' },
+  { code: 'zh-TW', label: '中文 (繁體)', flag: '🇹🇼' },
   { code: 'fr', label: 'Français', flag: '🇫🇷' },
   { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
   { code: 'el', label: 'Ελληνικά', flag: '🇬🇷' },
@@ -148,4 +185,82 @@ export const LANGUAGES = [
   { code: 'th', label: 'ไทย', flag: '🇹🇭' },
   { code: 'tr', label: 'Türkçe', flag: '🇹🇷' },
   { code: 'vi', label: 'Tiếng Việt', flag: '🇻🇳' },
+  // South/Southeast Asia
+  { code: 'hi', label: 'हिन्दी', flag: '🇮🇳' },
+  { code: 'bn', label: 'বাংলা', flag: '🇧🇩' },
+  { code: 'ta', label: 'தமிழ்', flag: '🇮🇳' },
+  { code: 'te', label: 'తెలుగు', flag: '🇮🇳' },
+  { code: 'ml', label: 'മലയാളം', flag: '🇮🇳' },
+  { code: 'mr', label: 'मराठी', flag: '🇮🇳' },
+  { code: 'gu', label: 'ગુજરાતી', flag: '🇮🇳' },
+  { code: 'kn', label: 'ಕನ್ನಡ', flag: '🇮🇳' },
+  { code: 'pa', label: 'ਪੰਜਾਬੀ', flag: '🇮🇳' },
+  { code: 'ur', label: 'اردو', flag: '🇵🇰' },
+  { code: 'my', label: 'မြန်မာ', flag: '🇲🇲' },
+  { code: 'km', label: 'ខ្មែរ', flag: '🇰🇭' },
+  { code: 'lo', label: 'ລາວ', flag: '🇱🇦' },
+  { code: 'ms', label: 'Bahasa Melayu', flag: '🇲🇾' },
+  { code: 'id', label: 'Bahasa Indonesia', flag: '🇮🇩' },
+  { code: 'tl', label: 'Tagalog', flag: '🇵🇭' },
+  { code: 'si', label: 'සිංහල', flag: '🇱🇰' },
+  { code: 'ne', label: 'नेपाली', flag: '🇳🇵' },
+  // Central Asia / Caucasus
+  { code: 'ka', label: 'ქართული', flag: '🇬🇪' },
+  { code: 'hy', label: 'Հայերեն', flag: '🇦🇲' },
+  { code: 'az', label: 'Azərbaycan', flag: '🇦🇿' },
+  { code: 'kk', label: 'Қазақ', flag: '🇰🇿' },
+  { code: 'uz', label: 'Oʻzbek', flag: '🇺🇿' },
+  { code: 'ky', label: 'Кыргыз', flag: '🇰🇬' },
+  { code: 'tg', label: 'Тоҷикӣ', flag: '🇹🇯' },
+  { code: 'mn', label: 'Монгол', flag: '🇲🇳' },
+  // Middle East / North Africa
+  { code: 'fa', label: 'فارسی', flag: '🇮🇷' },
+  { code: 'he', label: 'עברית', flag: '🇮🇱' },
+  { code: 'ku', label: 'Kurdî', flag: '🇮🇶' },
+  { code: 'ps', label: 'پښتو', flag: '🇦🇫' },
+  // Sub-Saharan Africa
+  { code: 'sw', label: 'Kiswahili', flag: '🇹🇿' },
+  { code: 'am', label: 'አማርኛ', flag: '🇪🇹' },
+  { code: 'ha', label: 'Hausa', flag: '🇳🇬' },
+  { code: 'yo', label: 'Yorùbá', flag: '🇳🇬' },
+  { code: 'ig', label: 'Igbo', flag: '🇳🇬' },
+  { code: 'zu', label: 'isiZulu', flag: '🇿🇦' },
+  { code: 'xh', label: 'isiXhosa', flag: '🇿🇦' },
+  { code: 'af', label: 'Afrikaans', flag: '🇿🇦' },
+  { code: 'so', label: 'Soomaali', flag: '🇸🇴' },
+  { code: 'rw', label: 'Kinyarwanda', flag: '🇷🇼' },
+  { code: 'sn', label: 'chiShona', flag: '🇿🇼' },
+  { code: 'ny', label: 'Chichewa', flag: '🇲🇼' },
+  // European
+  { code: 'uk', label: 'Українська', flag: '🇺🇦' },
+  { code: 'bg', label: 'Български', flag: '🇧🇬' },
+  { code: 'hr', label: 'Hrvatski', flag: '🇭🇷' },
+  { code: 'sr', label: 'Српски', flag: '🇷🇸' },
+  { code: 'sk', label: 'Slovenčina', flag: '🇸🇰' },
+  { code: 'cs', label: 'Čeština', flag: '🇨🇿' },
+  { code: 'hu', label: 'Magyar', flag: '🇭🇺' },
+  { code: 'ro', label: 'Română', flag: '🇷🇴' },
+  { code: 'lt', label: 'Lietuvių', flag: '🇱🇹' },
+  { code: 'lv', label: 'Latviešu', flag: '🇱🇻' },
+  { code: 'et', label: 'Eesti', flag: '🇪🇪' },
+  { code: 'fi', label: 'Suomi', flag: '🇫🇮' },
+  { code: 'da', label: 'Dansk', flag: '🇩🇰' },
+  { code: 'no', label: 'Norsk', flag: '🇳🇴' },
+  { code: 'is', label: 'Íslenska', flag: '🇮🇸' },
+  { code: 'ga', label: 'Gaeilge', flag: '🇮🇪' },
+  { code: 'cy', label: 'Cymraeg', flag: '🏴󠁧󠁢󠁷󠁬󠁳󠁿' },
+  { code: 'mt', label: 'Malti', flag: '🇲🇹' },
+  { code: 'sq', label: 'Shqip', flag: '🇦🇱' },
+  { code: 'mk', label: 'Македонски', flag: '🇲🇰' },
+  { code: 'bs', label: 'Bosanski', flag: '🇧🇦' },
+  { code: 'be', label: 'Беларуская', flag: '🇧🇾' },
+  { code: 'ca', label: 'Català', flag: '🇪🇸' },
+  { code: 'gl', label: 'Galego', flag: '🇪🇸' },
+  { code: 'eu', label: 'Euskara', flag: '🇪🇸' },
+  { code: 'lb', label: 'Lëtzebuergesch', flag: '🇱🇺' },
+  // Pacific
+  { code: 'mi', label: 'Te Reo Māori', flag: '🇳🇿' },
+  { code: 'sm', label: 'Gagana Sāmoa', flag: '🇼🇸' },
+  { code: 'to', label: 'Lea Fakatonga', flag: '🇹🇴' },
+  { code: 'fj', label: 'Vosa Vakaviti', flag: '🇫🇯' },
 ];

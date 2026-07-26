@@ -5,6 +5,11 @@ import { MONITOR_COLORS } from '@/config';
 import { generateId, formatTime, getCSSColor } from '@/utils';
 import { sanitizeUrl } from '@/utils/sanitize';
 import { h, replaceChildren, clearChildren } from '@/utils/dom-utils';
+import { isLoggedIn, getCurrentUser } from '@/services/auth';
+import { showAuthModal } from '@/components/AuthModal';
+
+const MAX_MONITORS = 3;
+const STORAGE_PREFIX = 'monitors-';
 
 export class MonitorPanel extends Panel {
   private monitors: Monitor[] = [];
@@ -12,32 +17,77 @@ export class MonitorPanel extends Panel {
 
   constructor(initialMonitors: Monitor[] = []) {
     super({ id: 'monitors', title: t('panels.monitors') });
-    this.monitors = initialMonitors;
+    this.monitors = this.loadUserMonitors() ?? initialMonitors;
     this.renderInput();
+    window.addEventListener('auth-changed', () => {
+      this.monitors = this.loadUserMonitors() ?? [];
+      this.renderInput();
+      this.onMonitorsChange?.(this.monitors);
+    });
+  }
+
+  private loadUserMonitors(): Monitor[] | null {
+    const user = getCurrentUser();
+    if (!user) return null;
+    try {
+      const stored = localStorage.getItem(STORAGE_PREFIX + user.username);
+      return stored ? JSON.parse(stored) : [];
+    } catch { return []; }
+  }
+
+  private saveUserMonitors(): void {
+    const user = getCurrentUser();
+    if (!user) return;
+    localStorage.setItem(STORAGE_PREFIX + user.username, JSON.stringify(this.monitors));
   }
 
   private renderInput(): void {
     clearChildren(this.content);
 
+    if (!isLoggedIn()) {
+      const loginMessage = h('div', { style: 'color: var(--text-dim); font-size: 11px; margin: 12px 0;' },
+        'Login to add keyword monitors ',
+        h('button', {
+          className: 'monitor-add-btn',
+          style: 'font-size: 10px; padding: 2px 8px;',
+          onClick: () => showAuthModal(),
+        }, 'Login'),
+      );
+      this.content.appendChild(loginMessage);
+      return;
+    }
+
+    const atLimit = this.monitors.length >= MAX_MONITORS;
+
     const input = h('input', {
       type: 'text',
       className: 'monitor-input',
       id: 'monitorKeywords',
-      placeholder: t('components.monitor.placeholder'),
+      placeholder: atLimit ? 'Maximum monitors reached' : t('components.monitor.placeholder'),
+      disabled: atLimit,
       onKeypress: (e: Event) => { if ((e as KeyboardEvent).key === 'Enter') this.addMonitor(); },
     });
 
+    const addBtn = h('button', {
+      className: 'monitor-add-btn',
+      id: 'addMonitorBtn',
+      disabled: atLimit,
+      onClick: () => this.addMonitor(),
+    }, t('components.monitor.add'));
+
     const inputContainer = h('div', { className: 'monitor-input-container' },
       input,
-      h('button', { className: 'monitor-add-btn', id: 'addMonitorBtn', onClick: () => this.addMonitor() },
-        t('components.monitor.add'),
-      ),
+      addBtn,
     );
+
+    const counterText = `${this.monitors.length} of ${MAX_MONITORS} monitors used`;
+    const counter = h('div', { style: 'color: var(--text-dim); font-size: 10px; margin: 4px 0;' }, counterText);
 
     const monitorsList = h('div', { id: 'monitorsList' });
     const monitorsResults = h('div', { id: 'monitorsResults' });
 
     this.content.appendChild(inputContainer);
+    this.content.appendChild(counter);
     this.content.appendChild(monitorsList);
     this.content.appendChild(monitorsResults);
 
@@ -45,6 +95,11 @@ export class MonitorPanel extends Panel {
   }
 
   private addMonitor(): void {
+    if (this.monitors.length >= MAX_MONITORS) {
+      alert(`Maximum ${MAX_MONITORS} monitors reached`);
+      return;
+    }
+
     const input = document.getElementById('monitorKeywords') as HTMLInputElement;
     const keywords = input.value.trim();
 
@@ -58,13 +113,15 @@ export class MonitorPanel extends Panel {
 
     this.monitors.push(monitor);
     input.value = '';
-    this.renderMonitorsList();
+    this.saveUserMonitors();
+    this.renderInput();
     this.onMonitorsChange?.(this.monitors);
   }
 
   public removeMonitor(id: string): void {
     this.monitors = this.monitors.filter((m) => m.id !== id);
-    this.renderMonitorsList();
+    this.saveUserMonitors();
+    this.renderInput();
     this.onMonitorsChange?.(this.monitors);
   }
 

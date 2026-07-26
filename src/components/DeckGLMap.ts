@@ -75,6 +75,10 @@ import {
   CENTRAL_BANKS,
   COMMODITY_HUBS,
   GULF_INVESTMENTS,
+  PUBLISHER_HQS,
+  BOOK_FAIRS,
+  MAJOR_LIBRARIES,
+  LITERARY_LANDMARKS,
 } from '@/config';
 import type { GulfInvestment } from '@/types';
 import { resolveTradeRouteSegments, TRADE_ROUTES as TRADE_ROUTES_LIST, type TradeRouteSegment } from '@/config/trade-routes';
@@ -272,6 +276,8 @@ export class DeckGLMap {
   private repairShips: RepairShip[] = [];
   private healthByCableId: Record<string, CableHealthRecord> = {};
   private protests: SocialUnrestEvent[] = [];
+  private literaryTodayAuthors: import('@/services/literary-today').LiteraryTodayAuthor[] = [];
+  private openLibraryBooks: import('@/services/open-library-live').OpenLibraryBook[] = [];
   private militaryFlights: MilitaryFlight[] = [];
   private militaryFlightClusters: MilitaryFlightCluster[] = [];
   private militaryVessels: MilitaryVessel[] = [];
@@ -1189,7 +1195,7 @@ export class DeckGLMap {
     }
 
     // APT Groups layer (geopolitical variant only - always shown, no toggle)
-    if (SITE_VARIANT !== 'tech' && SITE_VARIANT !== 'happy') {
+    if (SITE_VARIANT !== 'tech' && SITE_VARIANT !== 'happy' && SITE_VARIANT !== 'books') {
       layers.push(this.createAPTGroupsLayer());
     }
 
@@ -1233,6 +1239,28 @@ export class DeckGLMap {
       }
       if (mapLayers.techEvents && this.techEvents.length > 0) {
         layers.push(...this.createTechEventClusterLayers());
+      }
+    }
+
+    // Book variant layers
+    if (SITE_VARIANT === 'books') {
+      if (mapLayers.publisherHQs) {
+        layers.push(this.createPublisherHQsLayer());
+      }
+      if (mapLayers.bookFairs) {
+        layers.push(this.createBookFairsLayer());
+      }
+      if (mapLayers.libraries) {
+        layers.push(this.createLibrariesLayer());
+      }
+      if (mapLayers.literaryLandmarks) {
+        layers.push(this.createLiteraryLandmarksLayer());
+      }
+      if (mapLayers.literaryToday && this.literaryTodayAuthors.length > 0) {
+        layers.push(this.createLiteraryTodayLayer());
+      }
+      if (mapLayers.openLibraryLive && this.openLibraryBooks.length > 0) {
+        layers.push(this.createOpenLibraryLiveLayer());
       }
     }
 
@@ -2380,6 +2408,87 @@ export class DeckGLMap {
     });
   }
 
+  // Book variant layer creation methods
+  private createPublisherHQsLayer(): ScatterplotLayer {
+    return new ScatterplotLayer({
+      id: 'publisher-hqs-layer',
+      data: PUBLISHER_HQS,
+      getPosition: (d) => [d.lon, d.lat],
+      getRadius: 14000,
+      getFillColor: [66, 133, 244, 200] as [number, number, number, number],
+      radiusMinPixels: 5,
+      radiusMaxPixels: 12,
+      pickable: true,
+    });
+  }
+
+  private createBookFairsLayer(): ScatterplotLayer {
+    return new ScatterplotLayer({
+      id: 'book-fairs-layer',
+      data: BOOK_FAIRS,
+      getPosition: (d) => [d.lon, d.lat],
+      getRadius: 16000,
+      getFillColor: [255, 179, 0, 210] as [number, number, number, number],
+      radiusMinPixels: 6,
+      radiusMaxPixels: 14,
+      pickable: true,
+    });
+  }
+
+  private createLibrariesLayer(): ScatterplotLayer {
+    return new ScatterplotLayer({
+      id: 'libraries-layer',
+      data: MAJOR_LIBRARIES,
+      getPosition: (d) => [d.lon, d.lat],
+      getRadius: 12000,
+      getFillColor: [76, 175, 80, 200] as [number, number, number, number],
+      radiusMinPixels: 5,
+      radiusMaxPixels: 11,
+      pickable: true,
+    });
+  }
+
+  private createLiteraryLandmarksLayer(): ScatterplotLayer {
+    return new ScatterplotLayer({
+      id: 'literary-landmarks-layer',
+      data: LITERARY_LANDMARKS,
+      getPosition: (d) => [d.lon, d.lat],
+      getRadius: 10000,
+      getFillColor: [156, 39, 176, 200] as [number, number, number, number],
+      radiusMinPixels: 4,
+      radiusMaxPixels: 10,
+      pickable: true,
+    });
+  }
+
+  private createLiteraryTodayLayer(): ScatterplotLayer {
+    return new ScatterplotLayer({
+      id: 'literary-today-layer',
+      data: this.literaryTodayAuthors,
+      getPosition: (d) => [d.lon, d.lat],
+      getRadius: 18000,
+      getFillColor: (d) => d.event === 'born'
+        ? [255, 102, 0, 220] as [number, number, number, number]   // B5K orange for births
+        : [180, 60, 0, 200] as [number, number, number, number],   // dark red for deaths
+      radiusMinPixels: 6,
+      radiusMaxPixels: 16,
+      pickable: true,
+    });
+  }
+
+  private createOpenLibraryLiveLayer(): ScatterplotLayer {
+    return new ScatterplotLayer({
+      id: 'open-library-live-layer',
+      data: this.openLibraryBooks,
+      getPosition: (d) => [d.lon, d.lat],
+      getRadius: 10000,
+      getFillColor: [255, 133, 51, 160] as [number, number, number, number], // light B5K orange
+      radiusMinPixels: 3,
+      radiusMaxPixels: 8,
+      pickable: true,
+    });
+  }
+
   private pulseTime = 0;
 
   private canPulse(now = Date.now()): boolean {
@@ -2772,6 +2881,22 @@ export class DeckGLMap {
         return { html: `<div class="deckgl-tooltip"><strong>${text(obj.shortName)}</strong><br/>${text(obj.city)}, ${text(obj.country)}</div>` };
       case 'commodity-hubs-layer':
         return { html: `<div class="deckgl-tooltip"><strong>${text(obj.name)}</strong><br/>${text(obj.type)} · ${text(obj.city)}</div>` };
+      case 'publisher-hqs-layer':
+        return { html: `<div class="deckgl-tooltip"><strong>${text(obj.name)}</strong><br/>${text(obj.city)}, ${text(obj.country)}</div>` };
+      case 'book-fairs-layer':
+        return { html: `<div class="deckgl-tooltip"><strong>${text(obj.name)}</strong><br/>${text(obj.city)}, ${text(obj.country)}</div>` };
+      case 'libraries-layer':
+        return { html: `<div class="deckgl-tooltip"><strong>${text(obj.name)}</strong><br/>${text(obj.city)}, ${text(obj.country)}</div>` };
+      case 'literary-landmarks-layer':
+        return { html: `<div class="deckgl-tooltip"><strong>${text(obj.name)}</strong><br/>${text(obj.description)}</div>` };
+      case 'literary-today-layer': {
+        const years = obj.birthYear && obj.deathYear ? `(${obj.birthYear}–${obj.deathYear})` : obj.birthYear ? `(b. ${obj.birthYear})` : '';
+        const dateStr = obj.eventMonth && obj.eventDay ? `${obj.eventMonth}/${obj.eventDay}` : 'today';
+        const eventLabel = obj.event === 'born' ? `Born ${dateStr}` : `Died ${dateStr}`;
+        return { html: `<div class="deckgl-tooltip"><strong>${text(obj.name)}</strong> ${text(years)}<br/>${eventLabel} in ${text(obj.placeName)}</div>` };
+      }
+      case 'open-library-live-layer':
+        return { html: `<div class="deckgl-tooltip"><strong>${text(obj.title)}</strong><br/>by ${text(obj.author)}<br/>${text(obj.country)}</div>` };
       case 'startup-hubs-layer':
         return { html: `<div class="deckgl-tooltip"><strong>${text(obj.city)}</strong><br/>${text(obj.country)}</div>` };
       case 'tech-hqs-layer':
@@ -3018,6 +3143,12 @@ export class DeckGLMap {
       'spaceports-layer': 'spaceport',
       'ports-layer': 'port',
       'flight-delays-layer': 'flight',
+      'publisher-hqs-layer': 'publisherHQ',
+      'book-fairs-layer': 'bookFair',
+      'libraries-layer': 'library',
+      'literary-landmarks-layer': 'literaryLandmark',
+      'literary-today-layer': 'literaryToday',
+      'open-library-live-layer': 'openLibraryBook',
       'startup-hubs-layer': 'startupHub',
       'tech-hqs-layer': 'techHQ',
       'accelerators-layer': 'accelerator',
@@ -3158,7 +3289,17 @@ export class DeckGLMap {
     const toggles = document.createElement('div');
     toggles.className = 'layer-toggles deckgl-layer-toggles';
 
-    const layerConfig = SITE_VARIANT === 'tech'
+    const layerConfig = SITE_VARIANT === 'books'
+      ? [
+          { key: 'publisherHQs', label: 'Publisher HQs', icon: '&#127970;' },
+          { key: 'bookFairs', label: 'Book Fairs', icon: '&#128214;' },
+          { key: 'libraries', label: 'Libraries', icon: '&#127963;' },
+          { key: 'literaryLandmarks', label: 'Literary Landmarks', icon: '&#9998;' },
+          { key: 'literaryToday', label: 'This Day in Literature', icon: '&#127874;' },
+          { key: 'openLibraryLive', label: 'Trending Books', icon: '&#128218;' },
+          { key: 'dayNight', label: t('components.deckgl.layers.dayNight'), icon: '&#127763;' },
+        ]
+      : SITE_VARIANT === 'tech'
       ? [
         { key: 'startupHubs', label: t('components.deckgl.layers.startupHubs'), icon: '&#128640;' },
         { key: 'techHQs', label: t('components.deckgl.layers.techHQs'), icon: '&#127970;' },
@@ -3854,6 +3995,16 @@ export class DeckGLMap {
 
   public setIranEvents(events: IranEvent[]): void {
     this.iranEvents = events;
+    this.render();
+  }
+
+  public setLiteraryTodayAuthors(authors: import('@/services/literary-today').LiteraryTodayAuthor[]): void {
+    this.literaryTodayAuthors = authors;
+    this.render();
+  }
+
+  public setOpenLibraryBooks(books: import('@/services/open-library-live').OpenLibraryBook[]): void {
+    this.openLibraryBooks = books;
     this.render();
   }
 

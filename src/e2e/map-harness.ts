@@ -179,6 +179,12 @@ const allLayersEnabled: MapLayers = {
   renewableInstallations: false,
   tradeRoutes: true,
   iranAttacks: false,
+  publisherHQs: true,
+  bookFairs: true,
+  libraries: true,
+  literaryLandmarks: true,
+  literaryToday: true,
+  openLibraryLive: true,
   dayNight: true,
 };
 
@@ -226,6 +232,12 @@ const allLayersDisabled: MapLayers = {
   renewableInstallations: false,
   tradeRoutes: false,
   iranAttacks: false,
+  publisherHQs: false,
+  bookFairs: false,
+  libraries: false,
+  literaryLandmarks: false,
+  literaryToday: false,
+  openLibraryLive: false,
   dayNight: false,
 };
 
